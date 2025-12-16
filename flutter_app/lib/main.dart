@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/widgets/navbar_widget.dart';
+import 'package:flutter_app/views/widget_tree.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,10 +29,7 @@ class _MyAppState extends State<MyApp> {
           brightness: Brightness.dark,
         ),
       ),
-      home: Scaffold(
-        appBar: AppBar(title: Center(child: Text('Flutter App'))),
-        bottomNavigationBar: NavbarWidget(),
-      ),
+      home: WidgetTree(),
     );
   }
 }
