@@ -1,4 +1,4 @@
-// valueNotifier
+// valueNotifier: hold data that can be listened to
 // ValueListenableBuilder: listen to the data (dont need the setState)
 import 'package:flutter/material.dart';
 
