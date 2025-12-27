@@ -3,18 +3,24 @@ import 'package:flutter_app/views/widget_tree.dart';
 import 'package:lottie/lottie.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({super.key, required this.title});
+
+  final String title;
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController(
+    text: 'axa',
+  );
+  final TextEditingController _passwordController = TextEditingController(
+    text: '123',
+  );
 
-  String confirmEmail = 'axa@gmail.com';
-  String confirmPassword = '123456';
+  String confirmEmail = 'axa';
+  String confirmPassword = '123';
   @override
   void dispose() {
     _emailController.dispose();
@@ -25,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login Page')),
+      appBar: AppBar(title: Text('${widget.title} Page')),
       body: Padding(
         padding: EdgeInsets.all(20.0),
         child: SingleChildScrollView(
@@ -69,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Login',
+                      widget.title,
                       style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
                     SizedBox(width: 10),
@@ -87,12 +93,25 @@ class _LoginPageState extends State<LoginPage> {
   void onLoginPressed() {
     if (confirmEmail == _emailController.text &&
         confirmPassword == _passwordController.text) {
-      Navigator.pushReplacement(
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
           builder: (context) {
             return WidgetTree();
           },
+        ),
+        (route) => false,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Invalid email or password'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
         ),
       );
     }

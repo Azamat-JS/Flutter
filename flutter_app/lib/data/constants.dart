@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+class KConstants {
+  static const String themeModeKey = 'theme_mode';
+}
+
 class KTextStyle {
   static const TextStyle normalTealText = TextStyle(
     fontSize: 24,
