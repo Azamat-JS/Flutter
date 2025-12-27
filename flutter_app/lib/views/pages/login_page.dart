@@ -25,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login Page'), ),
+      appBar: AppBar(title: Text('Login Page')),
       body: Padding(
         padding: EdgeInsets.all(20.0),
         child: SingleChildScrollView(
@@ -65,13 +65,16 @@ class _LoginPageState extends State<LoginPage> {
                   backgroundColor: Colors.teal,
                   minimumSize: Size(double.infinity, 40.0),
                 ),
-                child: Text(
-                  'Login',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.2,
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Login',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                    SizedBox(width: 10),
+                    Icon(Icons.login, color: Colors.white),
+                  ],
                 ),
               ),
             ],
