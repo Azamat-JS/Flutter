@@ -18,3 +18,11 @@ class KTextStyle {
     letterSpacing: 1.2,
   );
 }
+
+class KValue {
+  static const String welcomeText = 'Welcome to the Home Page!';
+  static const String cleanUI = 'Clean UI';
+  static const String fixBug = 'Fix Bug';
+  static const String descriptionText =
+      'This is an amazing Flutter application.';
+}

@@ -6,10 +6,12 @@ class ContainerWidget extends StatelessWidget {
     super.key,
     required this.title,
     required this.description,
+    required this.icon,
   });
 
   final String title;
   final String description;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,7 @@ class ContainerWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
+              Icon(icon, color: Colors.teal, size: 30.0),
               Text(title, style: KTextStyle.normalTealText),
               Text(description, style: KTextStyle.descriptionText),
             ],
