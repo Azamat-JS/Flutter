@@ -9,16 +9,18 @@ class HeroWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return nextPage!;
+      onTap: nextPage == null
+          ? null
+          : () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return nextPage!;
+                  },
+                ),
+              );
             },
-          ),
-        );
-      },
       child: Hero(
         tag: 'hero-image',
         child: ClipRRect(
