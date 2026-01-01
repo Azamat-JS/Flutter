@@ -17,11 +17,13 @@ class HomePage extends StatelessWidget {
       KValue.descriptionText,
     ];
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+      padding: EdgeInsets.symmetric(horizontal: 20.0),
       child: SingleChildScrollView(
         child: Column(
           children: [
+            SizedBox(height: 10),
             HeroWidget(title: 'Welcome to Flutter App', nextPage: CoursePage()),
+            SizedBox(height: 5),
             ...List.generate(items.length, (index) {
               return ContainerWidget(
                 title: items[index],
