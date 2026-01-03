@@ -40,23 +40,25 @@ class _CoursePageState extends State<CoursePage> {
       body: FutureBuilder(
         future: getData(),
         builder: (context, AsyncSnapshot<Activity> snapshot) {
+          Widget widget;
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            widget = Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            widget = Center(child: Text('Error: ${snapshot.error}'));
           }
           if (snapshot.hasData) {
             Activity activity = snapshot.data!;
-            return Padding(
+            widget = Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.0),
               child: SingleChildScrollView(
                 child: Column(children: [HeroWidget(title: activity.activity)]),
               ),
             );
           } else {
-            return Center(child: Text('No data available'));
+            widget = Center(child: Text('No data available'));
           }
+          return widget;
         },
       ),
     );
