@@ -1,8 +1,7 @@
-import 'package:cart_shop/components/my_drawer.dart';
 import 'package:flutter/material.dart';
 
-class ShopPage extends StatelessWidget {
-  const ShopPage({super.key});
+class CartPage extends StatelessWidget {
+  const CartPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -10,9 +9,8 @@ class ShopPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text('Shop Page'),
+        title: Text('Cart Page'),
       ),
-      drawer: MyDrawer(),
     );
   }
 }

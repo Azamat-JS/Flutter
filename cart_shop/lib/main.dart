@@ -1,17 +1,11 @@
-import 'package:cart_shop/models/counter_model.dart';
+import 'package:cart_shop/pages/cart_page.dart';
 import 'package:cart_shop/pages/intro_page.dart';
 import 'package:cart_shop/pages/shop_page.dart';
 import 'package:cart_shop/themes/light_mode.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 void main() {
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => CounterModel(),
-      child: const MyApp(),
-    ),
-  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -27,6 +21,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/intro_page': (context) => IntroPage(),
         '/shop_page': (context) => const ShopPage(),
+        '/cart_page': (context) => const CartPage(),
       },
     );
   }
