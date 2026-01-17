@@ -1,3 +1,4 @@
+import 'package:cart_shop/components/my_button.dart';
 import 'package:flutter/material.dart';
 
 class IntroPage extends StatefulWidget {
@@ -34,6 +35,8 @@ class _IntroPageState extends State<IntroPage> {
               ),
             ),
             const SizedBox(height: 25),
+
+            MyButton(onTap: () {}, child: const Icon(Icons.arrow_forward)),
           ],
         ),
       ),
