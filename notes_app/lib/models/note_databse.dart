@@ -44,5 +44,6 @@ class NoteDatabse extends ChangeNotifier {
     await isar.writeTxn(() async {
       await isar.notes.delete(id);
     });
+    fetchNotes();
   }
 }
