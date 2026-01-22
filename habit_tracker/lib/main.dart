@@ -8,8 +8,11 @@ void main() async {
   await HabitDatabase.initilize();
   await HabitDatabase().saveFirstLaunchDate();
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => ThemeProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => HabitDatabase()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+      ],
       child: const MyApp(),
     ),
   );
