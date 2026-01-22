@@ -27,4 +27,54 @@ class HabitDatabase extends ChangeNotifier {
     final settings = await isar.appSettings.where().findFirst();
     return settings?.firstLaunchDate;
   }
+
+  final List<Habit> currentHabits = [];
+
+  Future<void> addHabit(String habitName) async {
+    final newHabit = Habit()..name = habitName;
+    await isar.writeTxn(() => isar.habits.put(newHabit));
+    readHabits();
+  }
+
+  Future<void> readHabits() async {
+    List<Habit> fetchHabits = await isar.habits.where().findAll();
+    currentHabits.clear();
+    currentHabits.addAll(fetchHabits);
+    notifyListeners();
+  }
+
+  Future<void> updateHabitCompletion(int id, bool isCompleted) async {
+    final habit = await isar.habits.get(id);
+    if (habit == null) return;
+
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    if (isCompleted && !habit.completedDates.contains(today)) {
+      habit.completedDates.add(today);
+    } else if (!isCompleted) {
+      habit.completedDates.removeWhere(
+        (d) =>
+            d.year == today.year &&
+            d.month == today.month &&
+            d.day == today.day,
+      );
+    }
+    await isar.writeTxn(() => isar.habits.put(habit));
+    await readHabits();
+  }
+
+  Future<void> updateHabitName(int id, String newName) async {
+    final habit = await isar.habits.get(id);
+    if (habit == null) return;
+
+    habit.name = newName;
+    await isar.writeTxn(() => isar.habits.put(habit));
+    await readHabits();
+  }
+
+  Future<void> deleteHabit(int id) async {
+    await isar.writeTxn(() => isar.habits.delete(id));
+    await readHabits();
+  }
 }
