@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notes_app/components/drawer.dart';
+import 'package:notes_app/components/note_tile.dart';
 import 'package:notes_app/models/note.dart';
 import 'package:notes_app/models/note_databse.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +32,8 @@ class _NotesPageState extends State<NotesPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('New Note'),
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        title: const Text('Create Note'),
         content: TextField(
           autofocus: true,
           controller: textController,
@@ -73,6 +75,7 @@ class _NotesPageState extends State<NotesPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.surface,
         title: const Text('Edit Note'),
         content: TextField(
           autofocus: true,
@@ -152,26 +155,14 @@ class _NotesPageState extends State<NotesPage> {
               itemCount: notes.length,
               itemBuilder: (context, index) {
                 final note = notes[index];
-                return ListTile(
-                  title: Text(note.text),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () {
-                          updateNote(note.id, note.text);
-                        },
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {
-                          context.read<NoteDatabse>().deleteNote(note.id);
-                        },
-                      ),
-                    ],
-                  ),
+                return NoteTile(
+                  text: note.text,
+                  updateNote: () {
+                    updateNote(note.id, note.text);
+                  },
+                  deleteNote: () {
+                    deleteNote(note.id);
+                  },
                 );
               },
             ),
