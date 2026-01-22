@@ -34,7 +34,16 @@ class NoteTile extends StatelessWidget {
               height: 100,
               backgroundColor: Theme.of(context).colorScheme.surface,
               context: context,
-              bodyBuilder: (context) => NoteSettings(),
+              bodyBuilder: (context) => NoteSettings(
+                onEditTap: () {
+                  Navigator.of(context).pop();
+                  updateNote!();
+                },
+                onDeleteTap: () {
+                  Navigator.of(context).pop();
+                  deleteNote!();
+                },
+              ),
             ),
             icon: Icon(Icons.more_vert),
           ),

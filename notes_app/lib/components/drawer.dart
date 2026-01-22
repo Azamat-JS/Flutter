@@ -18,6 +18,7 @@ class MyDrawer extends StatelessWidget {
               color: Theme.of(context).colorScheme.inversePrimary,
             ),
           ),
+          const SizedBox(height: 20),
           DrawerTile(
             title: 'Notes',
             leading: const Icon(Icons.home),
