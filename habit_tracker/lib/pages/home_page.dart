@@ -61,6 +61,73 @@ class _HomePageState extends State<HomePage> {
     context.read<HabitDatabase>().updateHabitCompletion(habit.id, value);
   }
 
+  void editHabitBox(Habit habit) {
+    textController.text = habit.name;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Edit Habit'),
+        content: TextField(
+          controller: textController,
+          autofocus: true,
+          decoration: const InputDecoration(hintText: 'Enter habit name'),
+        ),
+
+        actions: [
+          MaterialButton(
+            onPressed: () {
+              textController.clear();
+              Navigator.pop(context);
+            },
+            child: const Text('Cancel'),
+          ),
+          MaterialButton(
+            onPressed: () {
+              String habitName = textController.text.trim();
+              if (habitName.isNotEmpty) {
+                context.read<HabitDatabase>().updateHabitName(
+                  habit.id,
+                  habitName,
+                );
+                textController.clear();
+                Navigator.pop(context);
+              }
+            },
+            child: const Text('Edit'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void deleteHabitBox(Habit habit) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Are you sure you want to delete this habit?'),
+        actions: [
+          MaterialButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Cancel'),
+          ),
+          MaterialButton(
+            onPressed: () {
+              String habitName = textController.text.trim();
+              if (habitName.isNotEmpty) {
+                context.read<HabitDatabase>().deleteHabit(habit.id);
+                Navigator.pop(context);
+              }
+            },
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,6 +162,8 @@ class _HomePageState extends State<HomePage> {
           text: habit.name,
           isCompleted: isCompletedToday,
           onChanged: (value) => checkOnOff(value, habit),
+          editHabit: (context) => editHabitBox(habit),
+          deleteHabit: (context) => deleteHabitBox(habit),
         );
       },
     );
