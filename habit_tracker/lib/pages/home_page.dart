@@ -115,11 +115,8 @@ class _HomePageState extends State<HomePage> {
           ),
           MaterialButton(
             onPressed: () {
-              String habitName = textController.text.trim();
-              if (habitName.isNotEmpty) {
-                context.read<HabitDatabase>().deleteHabit(habit.id);
-                Navigator.pop(context);
-              }
+              context.read<HabitDatabase>().deleteHabit(habit.id);
+              Navigator.pop(context);
             },
             child: const Text('Delete'),
           ),
@@ -132,7 +129,11 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBar(),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Theme.of(context).colorScheme.inversePrimary,
+      ),
       drawer: const MyDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: createNewHabit,
