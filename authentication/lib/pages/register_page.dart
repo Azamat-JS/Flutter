@@ -1,12 +1,13 @@
 import 'package:authentication/components/my_button.dart';
 import 'package:authentication/components/my_textfield.dart';
 import 'package:authentication/components/square_tile.dart';
+import 'package:authentication/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
-  void Function()? onTap;
-  RegisterPage({super.key, required this.onTap});
+  final void Function()? onTap;
+  const RegisterPage({super.key, required this.onTap});
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -129,10 +130,16 @@ class _RegisterPageState extends State<RegisterPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SquareTile(imagePath: 'assets/images/google.webp'),
+                    SquareTile(
+                      onTap: AuthService().signInWithGoogle,
+                      imagePath: 'assets/images/google.webp',
+                    ),
                     const SizedBox(width: 25),
 
-                    SquareTile(imagePath: 'assets/images/apple.png'),
+                    SquareTile(
+                      onTap: () {},
+                      imagePath: 'assets/images/apple.png',
+                    ),
                   ],
                 ),
 
@@ -150,7 +157,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       child: const Text(
                         'Login now',
                         style: TextStyle(
-                          color: const Color.fromARGB(255, 13, 140, 243),
+                          color: Color.fromARGB(255, 13, 140, 243),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
