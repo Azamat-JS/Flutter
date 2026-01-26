@@ -1,15 +1,25 @@
+import 'dart:math';
+
 import 'package:authentication/components/my_button.dart';
 import 'package:authentication/components/my_textfield.dart';
 import 'package:authentication/components/square_tile.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  void signUserIn() {}
+  void signUserIn() async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: emailController.text,
+      password: passwordController.text,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,8 +38,8 @@ class LoginPage extends StatelessWidget {
               SizedBox(height: 20),
 
               MyTextfield(
-                controller: usernameController,
-                hintText: 'Username',
+                controller: emailController,
+                hintText: 'Email',
                 obscureText: false,
               ),
               SizedBox(height: 10),
@@ -84,20 +94,17 @@ class LoginPage extends StatelessWidget {
               ),
 
               const SizedBox(height: 50),
-              // google + apple sign in buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // google button
                   SquareTile(imagePath: 'assets/images/google.webp'),
                   const SizedBox(width: 25),
-                  // apple button
+
                   SquareTile(imagePath: 'assets/images/apple.png'),
                 ],
               ),
 
               SizedBox(height: 50),
-              // not a member? register now
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
