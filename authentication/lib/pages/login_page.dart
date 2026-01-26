@@ -8,15 +8,62 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   LoginPage({super.key});
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
+
   final passwordController = TextEditingController();
+
   void signUserIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: emailController.text,
-      password: passwordController.text,
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+    } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
+      Navigator.pop(context);
+      if (e.code == 'user-not-found' || e.code == 'invalid-email') {
+        await wrongEmailMessage();
+      } else if (e.code == 'wrong-password' || e.code == 'invalid-credential') {
+        await wrongPasswordMessage();
+      }
+      return;
+    }
+
+    if (!mounted) return;
+    Navigator.pop(context);
+  }
+
+  Future<void> wrongEmailMessage() {
+    if (!mounted) return Future.value();
+    return showDialog<void>(
+      context: context,
+      builder: (context) {
+        return const AlertDialog(title: Text('Incorrect Email'));
+      },
+    );
+  }
+
+  Future<void> wrongPasswordMessage() {
+    if (!mounted) return Future.value();
+    return showDialog<void>(
+      context: context,
+      builder: (context) {
+        return const AlertDialog(title: Text('Incorrect Password'));
+      },
     );
   }
 
