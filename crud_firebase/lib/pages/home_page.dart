@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crud_firebase/services/firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final FirestoreService firestoreService = FirestoreService();
   final TextEditingController textController = TextEditingController();
-  void openNoteBox() {
+  void openNoteBox({String? docID}) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -20,7 +21,11 @@ class _HomePageState extends State<HomePage> {
         actions: [
           ElevatedButton(
             onPressed: () {
-              firestoreService.addNote(textController.text);
+              if (docID == null) {
+                firestoreService.addNote(textController.text);
+              } else {
+                firestoreService.updateNote(docID, textController.text);
+              }
               textController.clear();
               Navigator.pop(context);
             },
@@ -38,6 +43,36 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: openNoteBox,
         child: const Icon(Icons.add),
+      ),
+      body: StreamBuilder(
+        stream: firestoreService.getNotesStream(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List notesList = snapshot.data!.docs;
+
+            return ListView.builder(
+              itemCount: notesList.length,
+              itemBuilder: (context, index) {
+                DocumentSnapshot document = notesList[index];
+                String docID = document.id;
+
+                Map<String, dynamic> data =
+                    document.data() as Map<String, dynamic>;
+                String noteText = data['note'];
+
+                return ListTile(
+                  title: Text(noteText),
+                  trailing: IconButton(
+                    onPressed: () => openNoteBox(docID: docID),
+                    icon: Icon(Icons.settings),
+                  ),
+                );
+              },
+            );
+          } else {
+            return const Text('No notes');
+          }
+        },
       ),
     );
   }
