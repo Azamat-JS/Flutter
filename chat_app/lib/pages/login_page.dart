@@ -1,8 +1,11 @@
+import 'package:chat_app/components/my_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _pwController = TextEditingController();
+  LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,19 @@ class LoginPage extends StatelessWidget {
             ),
 
             const SizedBox(height: 20),
-            TextField(),
+            MyTextfield(
+              hintText: 'Email',
+              obscureText: false,
+              controller: _emailController,
+            ),
+            const SizedBox(height: 10),
+            MyTextfield(
+              hintText: 'Password',
+              obscureText: true,
+              controller: _pwController,
+            ),
+
+            const SizedBox(height: 25),
           ],
         ),
       ),
