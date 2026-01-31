@@ -1,3 +1,4 @@
+import 'package:chat_app/components/my_button.dart';
 import 'package:chat_app/components/my_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -6,6 +7,8 @@ class LoginPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _pwController = TextEditingController();
   LoginPage({super.key});
+
+  void login() {}
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +42,8 @@ class LoginPage extends StatelessWidget {
             ),
 
             const SizedBox(height: 25),
+
+            MyButton(text: 'Login', onTap: login),
           ],
         ),
       ),
