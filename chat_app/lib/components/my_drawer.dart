@@ -1,3 +1,4 @@
+import 'package:chat_app/components/settings_page.dart';
 import 'package:flutter/material.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -35,7 +36,9 @@ class MyDrawer extends StatelessWidget {
                     Icons.home,
                     color: Theme.of(context).colorScheme.inversePrimary,
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                 ),
               ),
 
@@ -52,7 +55,14 @@ class MyDrawer extends StatelessWidget {
                     Icons.settings,
                     color: Theme.of(context).colorScheme.inversePrimary,
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pop(context);
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SettingsPage()),
+                    );
+                  },
                 ),
               ),
             ],
