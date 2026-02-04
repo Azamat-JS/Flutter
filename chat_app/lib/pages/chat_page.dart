@@ -1,3 +1,4 @@
+import 'package:chat_app/components/chat_bubble.dart';
 import 'package:chat_app/components/my_textfield.dart';
 import 'package:chat_app/services/auth/auth_service.dart';
 import 'package:chat_app/services/chat/chat_service.dart';
@@ -64,24 +65,37 @@ class ChatPage extends StatelessWidget {
         ? Alignment.centerRight
         : Alignment.centerLeft;
 
-    return Container(alignment: alignment, child: Text(data['message']));
+    return Container(
+      alignment: alignment,
+      child: ChatBubble(message: data['message'], isCurrentUser: isCurrentUser),
+    );
   }
 
   Widget _buildUserInput() {
-    return Row(
-      children: [
-        Expanded(
-          child: MyTextfield(
-            hintText: 'Type a message',
-            obscureText: false,
-            controller: _messageController,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 50.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: MyTextfield(
+              hintText: 'Type a message',
+              obscureText: false,
+              controller: _messageController,
+            ),
           ),
-        ),
-        IconButton(
-          onPressed: sendMessage,
-          icon: const Icon(Icons.arrow_upward),
-        ),
-      ],
+          Container(
+            margin: const EdgeInsets.only(right: 10),
+            decoration: BoxDecoration(
+              color: Colors.green,
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              onPressed: sendMessage,
+              icon: const Icon(Icons.send, color: Colors.white),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
