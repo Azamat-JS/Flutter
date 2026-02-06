@@ -32,6 +32,8 @@ class _ChatPageState extends State<ChatPage> {
         Future.delayed(const Duration(milliseconds: 500), () => scrollDown());
       }
     });
+
+    Future.delayed(const Duration(milliseconds: 500), () => scrollDown());
   }
 
   @override
@@ -58,6 +60,8 @@ class _ChatPageState extends State<ChatPage> {
       );
       _messageController.clear();
     }
+
+    scrollDown();
   }
 
   @override
