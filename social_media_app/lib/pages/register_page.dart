@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:social_media_app/components/my_button.dart';
@@ -21,7 +22,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final TextEditingController confirmController = TextEditingController();
 
-  void registerUser() {
+  void registerUser() async {
     showDialog(
       context: context,
       builder: (context) => const Center(child: CircularProgressIndicator()),
@@ -31,6 +32,19 @@ class _RegisterPageState extends State<RegisterPage> {
       Navigator.pop(context);
 
       displayMessageToUser("Passwords don't match!", context);
+    } else {
+      try {
+        UserCredential? userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+              email: emailController.text,
+              password: passwordController.text,
+            );
+        Navigator.pop(context);
+      } on FirebaseAuthException catch (e) {
+        Navigator.pop(context);
+
+        displayMessageToUser(e.code, context);
+      }
     }
   }
 
