@@ -2,17 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:social_media_app/components/my_button.dart';
 import 'package:social_media_app/components/my_textfield.dart';
+import 'package:social_media_app/helper/helper_functions.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   final void Function()? onTap;
-  RegisterPage({super.key, required this.onTap});
+  const RegisterPage({super.key, required this.onTap});
 
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController usernameController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
+
   final TextEditingController confirmController = TextEditingController();
 
-  void register() {}
+  void registerUser() {
+    showDialog(
+      context: context,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+
+    if (passwordController.text != confirmController.text) {
+      Navigator.pop(context);
+
+      displayMessageToUser("Passwords don't match!", context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +86,7 @@ class RegisterPage extends StatelessWidget {
               ),
 
               const SizedBox(height: 25),
-              MyButton(text: 'Sign up', onTap: register),
+              MyButton(text: 'Sign up', onTap: registerUser),
               const SizedBox(height: 25),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -78,7 +98,7 @@ class RegisterPage extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: onTap,
+                    onTap: widget.onTap,
                     child: const Text(
                       " Login Here",
                       style: TextStyle(fontWeight: FontWeight.bold),
