@@ -17,11 +17,6 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Profile page'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        elevation: 0,
-      ),
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
         future: getUserDetails(),
@@ -33,11 +28,39 @@ class ProfilePage extends StatelessWidget {
           } else if (snapshot.hasData) {
             Map<String, dynamic>? user = snapshot.data!.data();
 
-            return Column(
-              children: [Text(user!['email']), Text(user['username'])],
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary,
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+
+                    padding: EdgeInsets.all(25),
+                    child: Icon(Icons.person, size: 64),
+                  ),
+
+                  const SizedBox(height: 25),
+                  Text(
+                    user!['username'],
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+                  Text(
+                    user['email'],
+                    style: TextStyle(color: Colors.grey[600]),
+                  ),
+                ],
+              ),
             );
           } else {
-            return Text("No Data");
+            return const Text("No Data");
           }
         },
       ),
