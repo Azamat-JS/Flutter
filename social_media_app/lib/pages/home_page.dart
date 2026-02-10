@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_app/components/my_drawer.dart';
+import 'package:social_media_app/components/my_list_tile.dart';
 import 'package:social_media_app/components/my_post_button.dart';
 import 'package:social_media_app/components/my_textfield.dart';
 import 'package:social_media_app/database/firestore.dart';
@@ -48,6 +50,38 @@ class HomePage extends StatelessWidget {
                 MyPostButton(onTap: postMessage),
               ],
             ),
+          ),
+
+          StreamBuilder(
+            stream: database.getPostsStream(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
+              final posts = snapshot.data!.docs;
+
+              if (snapshot.data == null || posts.isEmpty) {
+                return const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(25),
+                    child: Text('No Posts.. Post Something!'),
+                  ),
+                );
+              }
+
+              return Expanded(
+                child: ListView.builder(
+                  itemCount: posts.length,
+                  itemBuilder: (context, index) {
+                    final post = posts[index];
+                    String message = post["PostMessage"];
+                    String userEmail = post["UserEmail"];
+                    Timestamp timestamp = post["TimeStamp"];
+                    return MyListTile(title: message, subtitle: userEmail);
+                  },
+                ),
+              );
+            },
           ),
         ],
       ),
