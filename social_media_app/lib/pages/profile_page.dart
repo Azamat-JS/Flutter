@@ -31,9 +31,13 @@ class ProfilePage extends StatelessWidget {
 
             return Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  MyBackButton(),
+                  const Padding(
+                    padding: const EdgeInsets.only(top: 50, left: 25),
+                    child: Row(children: [MyBackButton()]),
+                  ),
+                  const SizedBox(height: 25),
+
                   Container(
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.primary,
