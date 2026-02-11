@@ -48,9 +48,17 @@ class _HomePageState extends State<HomePage> {
             return ListView.builder(
               itemCount: teams.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(teams[index].abbreviation),
-                  subtitle: Text(teams[index].city),
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  margin: EdgeInsets.only(bottom: 10, right: 15, left: 15),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: ListTile(
+                    title: Text(teams[index].abbreviation),
+                    subtitle: Text(teams[index].city),
+                  ),
                 );
               },
             );
