@@ -18,7 +18,7 @@ class FirebaseApi {
     if (message == null) return;
 
     navigatorKey.currentState?.pushNamed(
-      'navigation_screen',
+      '/notification_screen',
       arguments: message,
     );
   }
