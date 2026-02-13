@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_design/constants/constants.dart';
 
 class MobileScaffold extends StatefulWidget {
   const MobileScaffold({super.key});
@@ -10,6 +11,10 @@ class MobileScaffold extends StatefulWidget {
 class _MobileScaffoldState extends State<MobileScaffold> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text('Mobile')));
+    return Scaffold(
+      appBar: myAppBar,
+      backgroundColor: myDefaultBackground,
+      drawer: myDrawer,
+    );
   }
 }
