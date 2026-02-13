@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_design/constants/constants.dart';
 
 class DesktopScaffold extends StatefulWidget {
   const DesktopScaffold({super.key});
@@ -10,6 +11,10 @@ class DesktopScaffold extends StatefulWidget {
 class _DesktopScaffoldState extends State<DesktopScaffold> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text('desktop')));
+    return Scaffold(
+      appBar: myAppBar,
+      backgroundColor: myDefaultBackground,
+      body: Row(children: [myDrawer]),
+    );
   }
 }
