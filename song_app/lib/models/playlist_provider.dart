@@ -25,6 +25,20 @@ class PlaylistProvider extends ChangeNotifier {
 
   int? _currentPodcastIndex;
 
+  /*
+  gettters
+  */
+
   List<Podcast> get playlist => _playlist;
   int? get currentPodcastIndex => _currentPodcastIndex;
+
+  /*
+ setters
+ */
+
+  set currentPodcastIndex(int? newIndex) {
+    _currentPodcastIndex = newIndex;
+
+    notifyListeners();
+  }
 }
