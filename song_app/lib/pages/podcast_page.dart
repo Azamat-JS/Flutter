@@ -6,12 +6,28 @@ import 'package:song_app/models/playlist_provider.dart';
 class PodcastPage extends StatelessWidget {
   const PodcastPage({super.key});
 
+  String formatTime(Duration duration) {
+    String twoDigitSeconds = duration.inSeconds
+        .remainder(60)
+        .toString()
+        .padLeft(2, '0');
+    String formattedTime = "${duration.inMinutes}:$twoDigitSeconds";
+
+    return formattedTime;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<PlaylistProvider>(
       builder: (context, value, child) {
         final playlist = value.playlist;
         final currentPodcast = playlist[value.currentPodcastIndex ?? 0];
+        final totalSeconds = value.totalDuration.inSeconds;
+        final currentSeconds = value.currentDuration.inSeconds;
+        final maxSeconds = totalSeconds > 0 ? totalSeconds.toDouble() : 1.0;
+        final sliderValue = totalSeconds > 0
+            ? currentSeconds.clamp(0, totalSeconds).toDouble()
+            : 0.0;
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.surface,
           body: SafeArea(
@@ -75,10 +91,10 @@ class PodcastPage extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('0:00'),
+                            Text(formatTime(value.currentDuration)),
                             Icon(Icons.shuffle),
                             Icon(Icons.repeat),
-                            Text("0:00"),
+                            Text(formatTime(value.totalDuration)),
                           ],
                         ),
                       ),
@@ -90,10 +106,13 @@ class PodcastPage extends StatelessWidget {
                         ),
                         child: Slider(
                           min: 0,
-                          max: 100,
-                          value: 100,
+                          max: maxSeconds,
+                          value: sliderValue,
                           activeColor: Colors.green,
-                          onChanged: (value) {},
+                          onChanged: (double valueSeconds) {},
+                          onChangeEnd: (double valueSeconds) {
+                            value.seek(Duration(seconds: valueSeconds.toInt()));
+                          },
                         ),
                       ),
                     ],
@@ -103,14 +122,31 @@ class PodcastPage extends StatelessWidget {
 
                   Row(
                     children: [
-                      Expanded(child: NeuBox(child: Icon(Icons.skip_previous))),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: value.playPreviousPodcast,
+                          child: const NeuBox(child: Icon(Icons.skip_previous)),
+                        ),
+                      ),
                       SizedBox(width: 20),
                       Expanded(
                         flex: 2,
-                        child: NeuBox(child: Icon(Icons.play_arrow)),
+                        child: GestureDetector(
+                          onTap: value.pauseOrResume,
+                          child: NeuBox(
+                            child: Icon(
+                              value.isPlaying ? Icons.pause : Icons.play_arrow,
+                            ),
+                          ),
+                        ),
                       ),
                       SizedBox(width: 20),
-                      Expanded(child: NeuBox(child: Icon(Icons.skip_next))),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: value.playNextPodcast,
+                          child: const NeuBox(child: Icon(Icons.skip_next)),
+                        ),
+                      ),
                     ],
                   ),
                 ],

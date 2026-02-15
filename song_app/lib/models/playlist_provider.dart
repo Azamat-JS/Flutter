@@ -7,19 +7,19 @@ class PlaylistProvider extends ChangeNotifier {
     Podcast(
       albumArtImagePath: "assets/images/logo1.png",
       speakerName: "Orus",
-      audioPath: "assets/audios/follow.wav",
+      audioPath: "audios/follow.wav",
       podcastName: "Follow",
     ),
     Podcast(
       albumArtImagePath: "assets/images/logo2.png",
       speakerName: "Orus",
-      audioPath: "assets/audios/follow.wav",
+      audioPath: "audios/follow.wav",
       podcastName: "Great",
     ),
     Podcast(
       albumArtImagePath: "assets/images/logo4.png",
       speakerName: "Orus",
-      audioPath: "assets/audios/follow.wav",
+      audioPath: "audios/follow.wav",
       podcastName: "Science",
     ),
   ];
@@ -86,6 +86,7 @@ class PlaylistProvider extends ChangeNotifier {
 
   void playPreviousPodcast() async {
     if (_currentDuration.inSeconds > 2) {
+      seek(Duration.zero);
     } else {
       if (_currentPodcastIndex! > 0) {
         currentPodcastIndex = _currentPodcastIndex! - 1;
@@ -101,7 +102,7 @@ class PlaylistProvider extends ChangeNotifier {
       notifyListeners();
     });
 
-    _audioPlayer.onDurationChanged.listen((newPosition) {
+    _audioPlayer.onPositionChanged.listen((newPosition) {
       _currentDuration = newPosition;
       notifyListeners();
     });
