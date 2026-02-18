@@ -13,7 +13,7 @@ class AuthGradientButton extends StatelessWidget {
           begin: Alignment.bottomLeft,
           end: Alignment.topRight,
         ),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: ElevatedButton(
         onPressed: () {},
