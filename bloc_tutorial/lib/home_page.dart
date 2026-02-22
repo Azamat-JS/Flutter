@@ -1,4 +1,5 @@
 import 'package:bloc_tutorial/cubit/counter_cubit.dart';
+import 'package:bloc_tutorial/inc_dec_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,25 +34,13 @@ class MyHomePage extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            onPressed: () {
-              counterCubit.increment();
-            },
-            tooltip: 'Increment',
-            child: const Icon(Icons.add),
-          ),
-          SizedBox(height: 10),
-          FloatingActionButton(
-            onPressed: () {
-              counterCubit.decrement();
-            },
-            tooltip: 'Decrement',
-            child: const Icon(Icons.minimize),
-          ),
-        ],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(
+            context,
+          ).push(MaterialPageRoute(builder: (context) => IncDecPage()));
+        },
+        child: Icon(Icons.navigate_next),
       ),
     );
   }

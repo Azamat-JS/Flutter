@@ -9,18 +9,21 @@ class IncDecPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final counterCubit = BlocProvider.of<CounterCubit>(context);
     return Scaffold(
+      appBar: AppBar(title: Text('Page')),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
+            heroTag: 'inc_fab',
             onPressed: () {
               counterCubit.increment();
             },
             tooltip: 'Increment',
             child: const Icon(Icons.add),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           FloatingActionButton(
+            heroTag: 'dec_fab',
             onPressed: () {
               counterCubit.decrement();
             },
