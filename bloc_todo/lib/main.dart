@@ -1,6 +1,8 @@
 import 'package:bloc_todo/add_todo_page.dart';
+import 'package:bloc_todo/cubit/todo_cubit.dart';
 import 'package:bloc_todo/todo_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,15 +13,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return BlocProvider<TodoCubit>(
+      create: (context) => TodoCubit(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        initialRoute: '/',
+        routes: {
+          '/': (_) => TodoList(),
+          '/add-todo': (_) => const AddTodoPage(),
+        },
       ),
-      initialRoute: '/',
-      routes: {'/': (_) => TodoList(), '/add-todo': (_) => const AddTodoPage()},
     );
   }
 }
