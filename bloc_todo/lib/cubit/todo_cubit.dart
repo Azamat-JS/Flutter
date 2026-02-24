@@ -8,4 +8,10 @@ class TodoCubit extends Cubit<List<TodoModel>> {
     final newTodo = TodoModel(name: name, createdAt: DateTime.now());
     emit([...state, newTodo]);
   }
+
+  @override
+  void onChange(Change<List<TodoModel>> change) {
+    super.onChange(change);
+    print("TodoCubit - $change");
+  }
 }
