@@ -1,7 +1,9 @@
+import 'package:bloc_login_form/bloc/auth_bloc.dart';
 import 'package:bloc_login_form/widgets/gradient_button.dart';
 import 'package:bloc_login_form/widgets/login_field.dart';
 import 'package:bloc_login_form/widgets/social_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -44,7 +46,16 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 15),
               LoginField(hintText: 'Password', controller: passwordController),
               const SizedBox(height: 20),
-              const GradientButton(),
+              GradientButton(
+                onPressed: () {
+                  context.read<AuthBloc>().add(
+                    AuthLoginRequested(
+                      email: emailController.text.trim(),
+                      password: passwordController.text.trim(),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),
