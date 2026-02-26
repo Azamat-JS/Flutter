@@ -22,5 +22,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         return emit(AuthFailure(e.toString()));
       }
     });
+
+    on<AuthLogoutRequested>((event, emit) async {
+      emit(AuthLoading());
+      try {
+        await Future.delayed(const Duration(seconds: 1));
+        return emit(AuthInitial());
+      } catch (e) {
+        return emit(AuthFailure(e.toString()));
+      }
+    });
   }
 }
