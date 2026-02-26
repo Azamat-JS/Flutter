@@ -1,11 +1,9 @@
-import 'dart:nativewrappers/_internal/vm/lib/ffi_native_type_patch.dart';
-
 import 'package:bloc_login_form/pallete.dart';
 import 'package:flutter/material.dart';
 
 class GradientButton extends StatelessWidget {
   final VoidCallback? onPressed;
-  GradientButton({Key? key, required this.onPressed}) : super(key: key);
+  const GradientButton({Key? key, required this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
