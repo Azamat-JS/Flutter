@@ -12,4 +12,13 @@ class AppBlocObserver extends BlocObserver {
     super.onChange(bloc, change);
     print('${bloc.runtimeType} $change - change');
   }
+
+  @override
+  void onTransition(
+    Bloc<dynamic, dynamic> bloc,
+    Transition<dynamic, dynamic> transition,
+  ) {
+    super.onTransition(bloc, transition);
+    print('${bloc.runtimeType} $transition - transition');
+  }
 }
