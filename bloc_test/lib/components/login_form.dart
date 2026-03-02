@@ -1,4 +1,6 @@
+import 'package:bloc_test/cubit/auth_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginForm extends StatelessWidget {
   final TextEditingController emailController;
@@ -27,6 +29,17 @@ class LoginForm extends StatelessWidget {
             controller: passwordController,
             obscureText: obscureText,
             decoration: InputDecoration(hintText: 'Password'),
+          ),
+          SizedBox(height: 24),
+          ElevatedButton(
+            onPressed: () {
+              // Handle login logic here
+              context.read<AuthCubit>().login(
+                emailController.text,
+                passwordController.text,
+              );
+            },
+            child: Text('Login'),
           ),
         ],
       ),

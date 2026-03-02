@@ -1,3 +1,4 @@
+import 'package:bloc_test/cubit/auth_cubit.dart';
 import 'package:bloc_test/pages/count_page.dart';
 import 'package:bloc_test/cubit/counter_cubit.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,20 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final counter = context.watch<CounterCubit>().state;
     return Scaffold(
-      appBar: AppBar(title: Text('Home Page')),
+      appBar: AppBar(
+        title: Text('Home Page'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: GestureDetector(
+              child: Icon(Icons.logout),
+              onTap: () {
+                context.read<AuthCubit>().logout();
+              },
+            ),
+          ),
+        ],
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
