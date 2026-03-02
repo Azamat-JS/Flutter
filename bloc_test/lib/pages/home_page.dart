@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final String email;
+  const HomePage({super.key, required this.email});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -20,6 +21,8 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text('Welcome, ${widget.email}'),
+            SizedBox(height: 30),
             Text('Counter value'),
             Text(
               '$counter',

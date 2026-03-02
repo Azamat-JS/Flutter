@@ -29,6 +29,12 @@ class AuthCubit extends Cubit<AuthState> {
       } else {
         emit(AuthError('Email and password cannot be empty'));
       }
-    } catch (e) {}
+    } catch (e) {
+      emit(AuthError('An unexpected error occurred'));
+    }
+  }
+
+  void logout() {
+    emit(AuthUnauthenticated());
   }
 }
