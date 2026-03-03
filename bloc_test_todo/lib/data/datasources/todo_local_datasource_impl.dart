@@ -29,12 +29,11 @@ class TodoLocalDatasourceImpl implements TodoLocalDataSource {
   @override
   Future<void> toggleTodo(int id) async {
     final todo = await isar.todoModels.get(id);
-    if (todo != null) {
-      todo.isCompleted = !todo.isCompleted;
-      await isar.writeTxn(() async {
-        await isar.todoModels.put(todo);
-      });
-    }
+    if (todo == null) return;
+    todo.isCompleted = !todo.isCompleted;
+    await isar.writeTxn(() async {
+      await isar.todoModels.put(todo);
+    });
   }
 
   @override
