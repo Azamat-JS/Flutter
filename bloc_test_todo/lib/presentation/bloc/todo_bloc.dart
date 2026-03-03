@@ -18,5 +18,41 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
         emit(TodoError(e.toString()));
       }
     });
+
+    on<AddTodo>((event, emit) async {
+      try {
+        await repository.addTodo(event.title);
+        add(LoadTodos());
+      } catch (e) {
+        emit(TodoError(e.toString()));
+      }
+    });
+
+    on<UpdateTodo>((event, emit) async {
+      try {
+        await repository.updateTodo(event.id, event.title);
+        add(LoadTodos());
+      } catch (e) {
+        emit(TodoError(e.toString()));
+      }
+    });
+
+    on<ToggleTodo>((event, emit) async {
+      try {
+        await repository.toggleTodo(event.id);
+        add(LoadTodos());
+      } catch (e) {
+        emit(TodoError(e.toString()));
+      }
+    });
+
+    on<DeleteTodo>((event, emit) async {
+      try {
+        await repository.deleteTodo(event.id);
+        add(LoadTodos());
+      } catch (e) {
+        emit(TodoError(e.toString()));
+      }
+    });
   }
 }
