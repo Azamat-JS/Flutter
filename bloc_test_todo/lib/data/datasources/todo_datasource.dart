@@ -4,5 +4,6 @@ abstract class TodoLocalDataSource {
   Future<List<TodoModel>> getTodos();
   Future<void> insertTodo(TodoModel todo);
   Future<void> updateTodo(TodoModel todo);
+  Future<void> toggleTodo(int id);
   Future<void> deleteTodo(int id);
 }
