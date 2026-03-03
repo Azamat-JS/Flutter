@@ -1,12 +1,12 @@
 import 'package:bloc_test/cubit/auth_cubit.dart';
+import 'package:bloc_test/cubit/auth_state.dart';
 import 'package:bloc_test/pages/count_page.dart';
 import 'package:bloc_test/cubit/counter_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
-  final String email;
-  const HomePage({super.key, required this.email});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -16,6 +16,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final counter = context.watch<CounterCubit>().state;
+    final authState = context.watch<AuthCubit>().state;
+    String email = '';
+    if (authState is AuthAuthenticated) {
+      email = authState.email;
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('Home Page'),
@@ -35,7 +40,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Welcome, ${widget.email}'),
+            Text('Welcome, $email!'),
             SizedBox(height: 30),
             Text('Counter value'),
             Text(

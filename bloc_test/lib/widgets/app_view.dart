@@ -11,7 +11,7 @@ class AppView extends StatelessWidget {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         if (state is AuthAuthenticated) {
-          return HomePage(email: state.email);
+          return HomePage();
         }
         return LoginPage();
       },
