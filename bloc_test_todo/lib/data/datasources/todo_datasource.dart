@@ -1,0 +1,8 @@
+import 'package:bloc_test_todo/data/models/todo_model.dart';
+
+abstract class TodoLocalDataSource {
+  Future<List<TodoModel>> getTodos();
+  Future<void> insertTodo(TodoModel todo);
+  Future<void> updateTodo(TodoModel todo);
+  Future<void> deleteTodo(int id);
+}
