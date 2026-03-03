@@ -1,4 +1,5 @@
 import 'package:bloc_test_todo/presentation/bloc/todo_bloc.dart';
+import 'package:bloc_test_todo/presentation/components/todo_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,6 +14,45 @@ class _HomePageState extends State<HomePage> {
   final titleController = TextEditingController();
 
   void addTodo() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Add ToDo'),
+        content: TextField(
+          autofocus: true,
+          controller: titleController,
+          onSubmitted: (value) {
+            Navigator.of(context).pop();
+          },
+        ),
+        actions: [
+          Row(
+            children: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Cancel'),
+              ),
+              SizedBox(width: 5),
+              ElevatedButton(
+                onPressed: () {
+                  context.read<TodoBloc>().add(
+                    AddTodo(titleController.text.trim()),
+                  );
+                  titleController.clear();
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Save'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void updateTodo() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -72,14 +112,20 @@ class _HomePageState extends State<HomePage> {
               itemCount: state.todos.length,
               itemBuilder: (context, index) {
                 final todo = state.todos[index];
-                return ListTile(
-                  title: Text(todo.title),
-                  trailing: Checkbox(
-                    value: todo.isCompleted,
-                    onChanged: (_) {
-                      context.read<TodoBloc>().add(ToggleTodo(todo.id));
-                    },
-                  ),
+                return TodoTile(
+                  title: todo.title,
+                  isCompleted: todo.isCompleted,
+                  toggleTodo: (_) {
+                    context.read<TodoBloc>().add(ToggleTodo(todo.id));
+                  },
+                  deleteFunction: (_) {
+                    context.read<TodoBloc>().add(DeleteTodo(todo.id));
+                  },
+                  updatedFunction: (_) {
+                    context.read<TodoBloc>().add(
+                      UpdateTodo(todo.id, todo.title),
+                    );
+                  },
                 );
               },
             );
