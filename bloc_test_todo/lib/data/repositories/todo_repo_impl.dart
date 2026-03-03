@@ -26,10 +26,10 @@ class TodoRepositoryImpl implements TodoRepository {
 
   @override
   Future<void> updateTodo(int id, String title) async {
-    final todo = TodoModel();
-    todo.id = id;
-    todo.title = title;
-    await local.updateTodo(todo);
+    final existing = await local.getTodoById(id);
+    if (existing == null) return;
+    existing.title = title;
+    await local.updateTodo(existing);
   }
 
   @override

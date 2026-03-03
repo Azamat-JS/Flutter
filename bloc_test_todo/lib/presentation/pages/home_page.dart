@@ -17,7 +17,10 @@ class _HomePageState extends State<HomePage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Add ToDo'),
+        title: Text(
+          'Add todo',
+          style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.bold),
+        ),
         content: TextField(
           autofocus: true,
           controller: titleController,
@@ -52,23 +55,22 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void updateTodo() {
+  void showUpdateDialog(int id, String currentTitle) {
+    titleController.text = currentTitle;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Add ToDo'),
-        content: TextField(
-          autofocus: true,
-          controller: titleController,
-          onSubmitted: (value) {
-            Navigator.of(context).pop();
-          },
+        title: Text(
+          'Update todo',
+          style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.bold),
         ),
+        content: TextField(controller: titleController, autofocus: true),
         actions: [
           Row(
             children: [
               TextButton(
                 onPressed: () {
+                  titleController.clear();
                   Navigator.of(context).pop();
                 },
                 child: const Text('Cancel'),
@@ -76,15 +78,44 @@ class _HomePageState extends State<HomePage> {
               SizedBox(width: 5),
               ElevatedButton(
                 onPressed: () {
-                  context.read<TodoBloc>().add(
-                    AddTodo(titleController.text.trim()),
-                  );
+                  final newTitle = titleController.text.trim();
+                  if (newTitle.isNotEmpty) {
+                    context.read<TodoBloc>().add(UpdateTodo(id, newTitle));
+                  }
                   titleController.clear();
                   Navigator.of(context).pop();
                 },
-                child: const Text('Save'),
+                child: const Text('Update'),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void showDeleteConfirmation(int id) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(
+          'Delete todo',
+          style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.bold),
+        ),
+        content: const Text('Are you sure you want to delete this todo?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () {
+              context.read<TodoBloc>().add(DeleteTodo(id));
+              titleController.clear();
+              Navigator.of(context).pop();
+            },
+            child: const Text('Delete', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -99,7 +130,14 @@ class _HomePageState extends State<HomePage> {
         onPressed: addTodo,
         child: Icon(Icons.add),
       ),
-      body: BlocBuilder<TodoBloc, TodoState>(
+      body: BlocConsumer<TodoBloc, TodoState>(
+        listener: (context, state) {
+          if (state is TodoError) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
+          }
+        },
         builder: (context, state) {
           if (state is TodoLoading) {
             return const Center(child: CircularProgressIndicator.adaptive());
@@ -119,21 +157,17 @@ class _HomePageState extends State<HomePage> {
                     context.read<TodoBloc>().add(ToggleTodo(todo.id));
                   },
                   deleteFunction: (_) {
-                    context.read<TodoBloc>().add(DeleteTodo(todo.id));
+                    showDeleteConfirmation(todo.id);
                   },
                   updatedFunction: (_) {
-                    context.read<TodoBloc>().add(
-                      UpdateTodo(todo.id, todo.title),
-                    );
+                    showUpdateDialog(todo.id, todo.title);
                   },
                 );
               },
             );
           }
           if (state is TodoError) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.message)));
+            return Center(child: Text(state.message));
           }
           return const SizedBox();
         },

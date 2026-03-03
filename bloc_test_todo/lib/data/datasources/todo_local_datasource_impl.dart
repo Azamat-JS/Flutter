@@ -13,6 +13,11 @@ class TodoLocalDatasourceImpl implements TodoLocalDataSource {
   }
 
   @override
+  Future<TodoModel?> getTodoById(int id) async {
+    return await isar.todoModels.get(id);
+  }
+
+  @override
   Future<void> insertTodo(TodoModel todo) async {
     await isar.writeTxn(() async {
       await isar.todoModels.put(todo);
