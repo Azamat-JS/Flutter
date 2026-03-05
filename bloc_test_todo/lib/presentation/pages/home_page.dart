@@ -130,6 +130,7 @@ class _HomePageState extends State<HomePage> {
         onPressed: addTodo,
         child: Icon(Icons.add),
       ),
+      drawer: Drawer(),
       body: BlocConsumer<TodoBloc, TodoState>(
         listener: (context, state) {
           if (state is TodoError) {
