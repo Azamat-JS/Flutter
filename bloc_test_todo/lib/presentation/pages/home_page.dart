@@ -31,6 +31,7 @@ class _HomePageState extends State<HomePage> {
         ),
         actions: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               TextButton(
                 onPressed: () {
@@ -40,6 +41,9 @@ class _HomePageState extends State<HomePage> {
               ),
               SizedBox(width: 5),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                ),
                 onPressed: () {
                   context.read<TodoBloc>().add(
                     AddTodo(titleController.text.trim()),
@@ -47,7 +51,12 @@ class _HomePageState extends State<HomePage> {
                   titleController.clear();
                   Navigator.of(context).pop();
                 },
-                child: const Text('Save'),
+                child: Text(
+                  'Save',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
               ),
             ],
           ),
@@ -68,6 +77,7 @@ class _HomePageState extends State<HomePage> {
         content: TextField(controller: titleController, autofocus: true),
         actions: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               TextButton(
                 onPressed: () {
@@ -78,6 +88,9 @@ class _HomePageState extends State<HomePage> {
               ),
               SizedBox(width: 5),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                ),
                 onPressed: () {
                   final newTitle = titleController.text.trim();
                   if (newTitle.isNotEmpty) {
@@ -86,7 +99,12 @@ class _HomePageState extends State<HomePage> {
                   titleController.clear();
                   Navigator.of(context).pop();
                 },
-                child: const Text('Update'),
+                child: Text(
+                  'Update',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
               ),
             ],
           ),
