@@ -42,7 +42,7 @@ class TodoTile extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.amber,
+            color: Theme.of(context).colorScheme.secondary,
             borderRadius: BorderRadius.circular(15),
           ),
           child: Row(
@@ -52,6 +52,8 @@ class TodoTile extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                  fontSize: 18,
                   decoration: isCompleted ? TextDecoration.lineThrough : null,
                 ),
               ),

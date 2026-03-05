@@ -1,4 +1,5 @@
 import 'package:bloc_test_todo/presentation/bloc/todo_bloc.dart';
+import 'package:bloc_test_todo/presentation/components/my_drawer.dart';
 import 'package:bloc_test_todo/presentation/components/todo_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -127,10 +128,14 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(title: const Text("Todo App")),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         onPressed: addTodo,
-        child: Icon(Icons.add),
+        child: Icon(
+          Icons.add,
+          color: Theme.of(context).colorScheme.inversePrimary,
+        ),
       ),
-      drawer: Drawer(),
+      drawer: MyDrawer(),
       body: BlocConsumer<TodoBloc, TodoState>(
         listener: (context, state) {
           if (state is TodoError) {
