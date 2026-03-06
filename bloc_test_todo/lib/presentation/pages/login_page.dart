@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(height: 25),
                   TextButton(
                     onPressed: () {
-                      Navigator.pushReplacement(context, SignUpPage.route());
+                      Navigator.push(context, SignUpPage.route());
                     },
                     child: RichText(
                       text: TextSpan(

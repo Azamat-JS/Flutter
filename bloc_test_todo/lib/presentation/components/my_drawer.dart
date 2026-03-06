@@ -1,6 +1,8 @@
+import 'package:bloc_test_todo/presentation/bloc/auth_bloc.dart';
 import 'package:bloc_test_todo/presentation/pages/home_page.dart';
 import 'package:bloc_test_todo/presentation/pages/settings_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
@@ -82,7 +84,32 @@ class MyDrawer extends StatelessWidget {
                 Icons.logout,
                 color: Theme.of(context).colorScheme.inversePrimary,
               ),
-              onTap: () {},
+              onTap: () async {
+                final shouldLogout = await showDialog<bool>(
+                  context: context,
+                  builder: (dialogContext) {
+                    return AlertDialog(
+                      title: const Text('Confirm logout'),
+                      content: const Text('Are you sure you want to log out?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(dialogContext, false),
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(dialogContext, true),
+                          child: const Text('Log out'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+                if (!context.mounted) return;
+                if (shouldLogout == true) {
+                  Navigator.pop(context);
+                  context.read<AuthBloc>().add(LogoutRequested());
+                }
+              },
             ),
           ),
         ],
