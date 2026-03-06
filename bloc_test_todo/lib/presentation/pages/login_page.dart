@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(height: 10),
                   MyTextField(
-                    controller: emailController,
+                    controller: pwController,
                     validator: (value) {
                       if (value == null || value.length < 6) {
                         return 'Password too short';
