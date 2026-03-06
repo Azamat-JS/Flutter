@@ -9,16 +9,25 @@ class AuthGate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(
+    return BlocConsumer<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthFailure) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: const Text('Failed to login')));
+        }
+      },
       builder: (context, state) {
         if (state is AuthLoading) {
           return const Scaffold(
             body: Center(child: CircularProgressIndicator.adaptive()),
           );
         }
+
         if (state is AuthAuthenticated) {
           return const HomePage();
         }
+
         if (state is AuthUnAuthenticated) {
           return const LoginPage();
         }

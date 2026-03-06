@@ -1,3 +1,4 @@
+import 'package:bloc_test_todo/presentation/themes/pallete.dart';
 import 'package:flutter/material.dart';
 
 class MyTextField extends StatelessWidget {
@@ -29,14 +30,11 @@ class MyTextField extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey, width: 3),
+            borderSide: BorderSide(color: Pallete.borderColor, width: 3),
             borderRadius: BorderRadius.circular(10),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              width: 3,
-              color: Theme.of(context).colorScheme.inversePrimary,
-            ),
+            borderSide: BorderSide(width: 3, color: Pallete.gradient2),
             borderRadius: BorderRadius.circular(10),
           ),
         ),

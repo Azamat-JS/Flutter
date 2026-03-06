@@ -1,10 +1,13 @@
 import 'package:bloc_test_todo/presentation/bloc/auth_bloc.dart';
 import 'package:bloc_test_todo/presentation/components/my_button.dart';
 import 'package:bloc_test_todo/presentation/components/my_text_field.dart';
+import 'package:bloc_test_todo/presentation/pages/sign_up_page.dart';
+import 'package:bloc_test_todo/presentation/themes/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginPage extends StatefulWidget {
+  static route() => MaterialPageRoute(builder: (context) => const LoginPage());
   const LoginPage({super.key});
 
   @override
@@ -60,6 +63,28 @@ class _LoginPageState extends State<LoginPage> {
                       }
                     },
                     text: 'Login',
+                  ),
+                  SizedBox(height: 25),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(context, SignUpPage.route());
+                    },
+                    child: RichText(
+                      text: TextSpan(
+                        text: "Don't have an account? ",
+                        style: Theme.of(context).textTheme.titleMedium,
+                        children: [
+                          TextSpan(
+                            text: " Register now",
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(
+                                  color: Pallete.gradient2,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),
