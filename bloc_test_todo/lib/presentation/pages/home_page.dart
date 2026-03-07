@@ -143,59 +143,60 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Todo App")),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        onPressed: addTodo,
-        child: Icon(
-          Icons.add,
-          color: Theme.of(context).colorScheme.inversePrimary,
-        ),
-      ),
-      drawer: MyDrawer(),
-      body: BlocConsumer<TodoBloc, TodoState>(
-        listener: (context, state) {
-          if (state is TodoError) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.message)));
+    return BlocConsumer<TodoBloc, TodoState>(
+      listener: (context, state) {
+        if (state is TodoError) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
+        }
+      },
+      builder: (context, state) {
+        if (state is TodoLoading) {
+          return const Center(child: CircularProgressIndicator.adaptive());
+        }
+        if (state is TodoLoaded) {
+          if (state.todos.isEmpty) {
+            return const Center(child: Text('No Todos yet'));
           }
-        },
-        builder: (context, state) {
-          if (state is TodoLoading) {
-            return const Center(child: CircularProgressIndicator.adaptive());
-          }
-          if (state is TodoLoaded) {
-            if (state.todos.isEmpty) {
-              return const Center(child: Text('No Todos yet'));
-            }
-            return ListView.builder(
-              itemCount: state.todos.length,
-              itemBuilder: (context, index) {
-                final todo = state.todos[index];
-                return TodoTile(
-                  title: todo.title,
-                  isCompleted: todo.isCompleted,
-                  toggleTodo: (_) {
-                    context.read<TodoBloc>().add(ToggleTodo(todo.id));
-                  },
-                  deleteFunction: (_) {
-                    showDeleteConfirmation(todo.id);
-                  },
-                  updatedFunction: (_) {
-                    showUpdateDialog(todo.id, todo.title);
-                  },
-                );
-              },
-            );
-          }
-          if (state is TodoError) {
-            return Center(child: Text(state.message));
-          }
-          return const SizedBox();
-        },
-      ),
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ListView.builder(
+                itemCount: state.todos.length,
+                itemBuilder: (context, index) {
+                  final todo = state.todos[index];
+                  return TodoTile(
+                    title: todo.title,
+                    isCompleted: todo.isCompleted,
+                    toggleTodo: (_) {
+                      context.read<TodoBloc>().add(ToggleTodo(todo.id));
+                    },
+                    deleteFunction: (_) {
+                      showDeleteConfirmation(todo.id);
+                    },
+                    updatedFunction: (_) {
+                      showUpdateDialog(todo.id, todo.title);
+                    },
+                  );
+                },
+              ),
+              FloatingActionButton(
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                onPressed: addTodo,
+                child: Icon(
+                  Icons.add,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+              ),
+            ],
+          );
+        }
+        if (state is TodoError) {
+          return Center(child: Text(state.message));
+        }
+        return const SizedBox();
+      },
     );
   }
 }

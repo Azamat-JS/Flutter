@@ -49,6 +49,7 @@ class _LoginPageState extends State<LoginPage> {
                       return null;
                     },
                     hintText: 'Password',
+                    obscureText: true,
                   ),
                   SizedBox(height: 20),
                   MyButton(

@@ -1,6 +1,7 @@
 import 'package:bloc_test_todo/presentation/bloc/auth_bloc.dart';
 import 'package:bloc_test_todo/presentation/pages/home_page.dart';
 import 'package:bloc_test_todo/presentation/pages/login_page.dart';
+import 'package:bloc_test_todo/presentation/pages/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -25,7 +26,7 @@ class AuthGate extends StatelessWidget {
         }
 
         if (state is AuthAuthenticated) {
-          return const HomePage();
+          return const MainPage();
         }
 
         if (state is AuthFailure) {

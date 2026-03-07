@@ -1,11 +1,16 @@
 import 'package:bloc_test_todo/presentation/bloc/auth_bloc.dart';
-import 'package:bloc_test_todo/presentation/pages/home_page.dart';
-import 'package:bloc_test_todo/presentation/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyDrawer extends StatelessWidget {
-  const MyDrawer({super.key});
+  final int selectedIndex;
+  final ValueChanged<int> onDestinationSelected;
+
+  const MyDrawer({
+    super.key,
+    required this.selectedIndex,
+    required this.onDestinationSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +33,7 @@ class MyDrawer extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: ListTile(
+                  selected: selectedIndex == 0,
                   title: Text(
                     'H O M E',
                     style: TextStyle(
@@ -40,16 +46,14 @@ class MyDrawer extends StatelessWidget {
                   ),
                   onTap: () {
                     Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
+                    onDestinationSelected(0);
                   },
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: ListTile(
+                  selected: selectedIndex == 2,
                   title: Text(
                     'S E T T I N G S',
                     style: TextStyle(
@@ -62,10 +66,7 @@ class MyDrawer extends StatelessWidget {
                   ),
                   onTap: () {
                     Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SettingsPage()),
-                    );
+                    onDestinationSelected(2);
                   },
                 ),
               ),
@@ -101,7 +102,10 @@ class MyDrawer extends StatelessWidget {
                             backgroundColor: Colors.red,
                           ),
                           onPressed: () => Navigator.pop(dialogContext, true),
-                          child: const Text('Log out'),
+                          child: const Text(
+                            'Log out',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ],
                     );
