@@ -97,6 +97,9 @@ class MyDrawer extends StatelessWidget {
                           child: const Text('Cancel'),
                         ),
                         TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.red,
+                          ),
                           onPressed: () => Navigator.pop(dialogContext, true),
                           child: const Text('Log out'),
                         ),

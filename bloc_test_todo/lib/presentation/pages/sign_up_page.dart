@@ -1,6 +1,7 @@
 import 'package:bloc_test_todo/presentation/bloc/auth_bloc.dart';
 import 'package:bloc_test_todo/presentation/components/my_button.dart';
 import 'package:bloc_test_todo/presentation/components/my_text_field.dart';
+import 'package:bloc_test_todo/presentation/pages/login_page.dart';
 import 'package:bloc_test_todo/presentation/themes/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,6 +27,11 @@ class _SignUpPageState extends State<SignUpPage> {
           Navigator.of(context).popUntil((route) => route.isFirst);
         }
         if (state is AuthFailure) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => LoginPage.route()),
+            (route) => false,
+          );
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(state.message)));

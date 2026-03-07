@@ -14,7 +14,7 @@ class AuthGate extends StatelessWidget {
         if (state is AuthFailure) {
           ScaffoldMessenger.of(
             context,
-          ).showSnackBar(SnackBar(content: const Text('Failed to login')));
+          ).showSnackBar(SnackBar(content: Text(state.message)));
         }
       },
       builder: (context, state) {
@@ -26,6 +26,10 @@ class AuthGate extends StatelessWidget {
 
         if (state is AuthAuthenticated) {
           return const HomePage();
+        }
+
+        if (state is AuthFailure) {
+          return const LoginPage();
         }
 
         if (state is AuthUnAuthenticated) {
