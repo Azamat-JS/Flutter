@@ -1,5 +1,4 @@
 import 'package:bloc_test_todo/presentation/bloc/todo_bloc.dart';
-import 'package:bloc_test_todo/presentation/components/my_drawer.dart';
 import 'package:bloc_test_todo/presentation/components/todo_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,59 +13,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final titleController = TextEditingController();
 
-  void addTodo() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          'Add todo',
-          style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.bold),
-        ),
-        content: TextField(
-          autofocus: true,
-          controller: titleController,
-          onSubmitted: (value) {
-            Navigator.of(context).pop();
-          },
-        ),
-        actions: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Cancel'),
-              ),
-              SizedBox(width: 5),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-                ),
-                onPressed: () {
-                  context.read<TodoBloc>().add(
-                    AddTodo(titleController.text.trim()),
-                  );
-                  titleController.clear();
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                  'Save',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
   void showUpdateDialog(int id, String currentTitle) {
-    titleController.text = currentTitle;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -160,33 +107,26 @@ class _HomePageState extends State<HomePage> {
             return const Center(child: Text('No Todos yet'));
           }
           return Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ListView.builder(
-                itemCount: state.todos.length,
-                itemBuilder: (context, index) {
-                  final todo = state.todos[index];
-                  return TodoTile(
-                    title: todo.title,
-                    isCompleted: todo.isCompleted,
-                    toggleTodo: (_) {
-                      context.read<TodoBloc>().add(ToggleTodo(todo.id));
-                    },
-                    deleteFunction: (_) {
-                      showDeleteConfirmation(todo.id);
-                    },
-                    updatedFunction: (_) {
-                      showUpdateDialog(todo.id, todo.title);
-                    },
-                  );
-                },
-              ),
-              FloatingActionButton(
-                backgroundColor: Theme.of(context).colorScheme.secondary,
-                onPressed: addTodo,
-                child: Icon(
-                  Icons.add,
-                  color: Theme.of(context).colorScheme.inversePrimary,
+              Expanded(
+                child: ListView.builder(
+                  itemCount: state.todos.length,
+                  itemBuilder: (context, index) {
+                    final todo = state.todos[index];
+                    return TodoTile(
+                      title: todo.title,
+                      isCompleted: todo.isCompleted,
+                      toggleTodo: (_) {
+                        context.read<TodoBloc>().add(ToggleTodo(todo.id));
+                      },
+                      deleteFunction: (_) {
+                        showDeleteConfirmation(todo.id);
+                      },
+                      updatedFunction: (_) {
+                        showUpdateDialog(todo.id, todo.title);
+                      },
+                    );
+                  },
                 ),
               ),
             ],

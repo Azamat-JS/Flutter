@@ -9,6 +9,7 @@ import 'package:bloc_test_todo/domain/repositories/auth_repo.dart';
 import 'package:bloc_test_todo/domain/repositories/todo_repo.dart';
 import 'package:bloc_test_todo/presentation/bloc/auth_bloc.dart';
 import 'package:bloc_test_todo/presentation/bloc/todo_bloc.dart';
+import 'package:bloc_test_todo/presentation/cubit/btm_nav_cubit.dart';
 import 'package:bloc_test_todo/presentation/pages/home_page.dart';
 import 'package:bloc_test_todo/presentation/themes/cubit/theme_cubit.dart';
 import 'package:bloc_test_todo/presentation/themes/dark_mode.dart';
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
               AuthBloc(authRepository)..add(AuthCheckRequested()),
         ),
         BlocProvider(create: (context) => ThemeCubit()),
+        BlocProvider(create: (context) => BtmNavCubit()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, themeMode) {

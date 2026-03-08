@@ -29,7 +29,6 @@ class _IntroPageState extends State<IntroPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Navbar App')),
-      body: pages[_selectedIndex],
       bottomNavigationBar: Container(
         padding: EdgeInsets.all(10),
         margin: EdgeInsets.all(10),
@@ -55,6 +54,7 @@ class _IntroPageState extends State<IntroPage> {
           ),
         ),
       ),
+      body: pages[_selectedIndex],
     );
   }
 }
