@@ -1,4 +1,6 @@
+import 'package:blog_cle_arch/core/theme/app_pallete.dart';
 import 'package:blog_cle_arch/features/auth/presentation/widgets/auth_field.dart';
+import 'package:blog_cle_arch/features/auth/presentation/widgets/auth_gradient.dart';
 import 'package:flutter/material.dart';
 
 class SignupPage extends StatefulWidget {
@@ -27,7 +29,24 @@ class _SignupPageState extends State<SignupPage> {
             AuthField(hintText: 'Email'),
             SizedBox(height: 15),
             AuthField(hintText: 'Password'),
-            SizedBox(height: 15),
+            SizedBox(height: 20),
+            AuthGradientButton(),
+            SizedBox(height: 20),
+            RichText(
+              text: TextSpan(
+                text: "Don't have an account? ",
+                style: Theme.of(context).textTheme.titleMedium,
+                children: [
+                  TextSpan(
+                    text: " Sign In",
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: AppPallete.gradient2,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
