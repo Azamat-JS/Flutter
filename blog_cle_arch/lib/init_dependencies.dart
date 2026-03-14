@@ -3,6 +3,7 @@ import 'package:blog_cle_arch/features/auth/data/repositories/auth_repository_im
 import 'package:blog_cle_arch/features/auth/domain/repository/auth_repository.dart';
 import 'package:blog_cle_arch/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:blog_cle_arch/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 
@@ -19,7 +20,10 @@ Future<void> initDependencies() async {
 void _initAuth() {
   // datasource
   serviceLocator.registerLazySingleton<AuthRemoteDatasource>(
-    () => AuthRemoteDataSourceImpl(serviceLocator<FirebaseAuth>()),
+    () => AuthRemoteDataSourceImpl(
+      serviceLocator<FirebaseAuth>(),
+      serviceLocator<FirebaseFirestore>(),
+    ),
   );
 
   // repository

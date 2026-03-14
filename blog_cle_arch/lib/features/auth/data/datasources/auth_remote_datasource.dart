@@ -1,6 +1,6 @@
 import 'package:blog_cle_arch/core/error/exceptions.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract interface class AuthRemoteDatasource {
   Future<String> signUpWithEmailPassword({
@@ -17,14 +17,22 @@ abstract interface class AuthRemoteDatasource {
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
   final FirebaseAuth firebaseAuth;
-  AuthRemoteDataSourceImpl(this.firebaseAuth);
+  final FirebaseFirestore firestore;
+  AuthRemoteDataSourceImpl(this.firebaseAuth, this.firestore);
   @override
   Future<String> loginWithEmailPassword({
     required String email,
     required String password,
-  }) {
-    // TODO: implement loginWithEmailPassword
-    throw UnimplementedError();
+  }) async {
+    try {
+      final credential = await firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return credential.user!.uid;
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
   }
 
   @override
@@ -38,12 +46,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
         password: password,
         email: email,
       );
-      final user = credential.user;
-      if (user == null) {
-        throw ServerException('User is null!');
-      }
-      await user.updateDisplayName(name);
-      return user.uid;
+      final uid = credential.user!.uid;
+
+      await firestore.collection('users').doc(uid).set({
+        'name': name,
+        'email': email,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
+      return uid;
     } catch (e) {
       throw ServerException(e.toString());
     }
