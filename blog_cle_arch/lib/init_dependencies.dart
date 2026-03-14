@@ -13,6 +13,9 @@ Future<void> initDependencies() async {
   serviceLocator.registerLazySingleton<FirebaseAuth>(
     () => FirebaseAuth.instance,
   );
+  serviceLocator.registerLazySingleton<FirebaseFirestore>(
+    () => FirebaseFirestore.instance,
+  );
 
   _initAuth();
 }
