@@ -1,4 +1,5 @@
 import 'package:blog_cle_arch/core/error/exceptions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract interface class AuthRemoteDatasource {
@@ -15,8 +16,8 @@ abstract interface class AuthRemoteDatasource {
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
-  final SupabaseClient supabaseClient;
-  AuthRemoteDataSourceImpl(this.supabaseClient);
+  final FirebaseAuth firebaseAuth;
+  AuthRemoteDataSourceImpl(this.firebaseAuth);
   @override
   Future<String> loginWithEmailPassword({
     required String email,
@@ -33,15 +34,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
     required String password,
   }) async {
     try {
-      final response = await supabaseClient.auth.signUp(
+      final credential = await firebaseAuth.createUserWithEmailAndPassword(
         password: password,
         email: email,
-        data: {'name': name},
       );
-      if (response.user == null) {
+      final user = credential.user;
+      if (user == null) {
         throw ServerException('User is null!');
       }
-      return response.user!.id;
+      await user.updateDisplayName(name);
+      return user.uid;
     } catch (e) {
       throw ServerException(e.toString());
     }
