@@ -1,6 +1,7 @@
 import 'package:blog_cle_arch/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:blog_cle_arch/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:blog_cle_arch/features/auth/domain/repository/auth_repository.dart';
+import 'package:blog_cle_arch/features/auth/domain/usecases/user_login.dart';
 import 'package:blog_cle_arch/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:blog_cle_arch/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -34,13 +35,21 @@ void _initAuth() {
     () => AuthRepositoryImpl(serviceLocator<AuthRemoteDatasource>()),
   );
 
-  // usecase
+  // sign up usecase
   serviceLocator.registerLazySingleton<UserSignUp>(
     () => UserSignUp(serviceLocator<AuthRepository>()),
   );
 
+  // login usecase
+  serviceLocator.registerLazySingleton<UserLogin>(
+    () => UserLogin(serviceLocator<AuthRepository>()),
+  );
+
   // bloc
   serviceLocator.registerFactory<AuthBloc>(
-    () => AuthBloc(userSignUp: serviceLocator<UserSignUp>()),
+    () => AuthBloc(
+      userSignUp: serviceLocator<UserSignUp>(),
+      userLogin: serviceLocator<UserLogin>(),
+    ),
   );
 }
