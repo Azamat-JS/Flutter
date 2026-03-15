@@ -23,33 +23,30 @@ Future<void> initDependencies() async {
 
 void _initAuth() {
   // datasource
-  serviceLocator.registerLazySingleton<AuthRemoteDatasource>(
-    () => AuthRemoteDataSourceImpl(
-      serviceLocator<FirebaseAuth>(),
-      serviceLocator<FirebaseFirestore>(),
-    ),
-  );
-
-  // repository
-  serviceLocator.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(serviceLocator<AuthRemoteDatasource>()),
-  );
-
-  // sign up usecase
-  serviceLocator.registerLazySingleton<UserSignUp>(
-    () => UserSignUp(serviceLocator<AuthRepository>()),
-  );
-
-  // login usecase
-  serviceLocator.registerLazySingleton<UserLogin>(
-    () => UserLogin(serviceLocator<AuthRepository>()),
-  );
-
-  // bloc
-  serviceLocator.registerFactory<AuthBloc>(
-    () => AuthBloc(
-      userSignUp: serviceLocator<UserSignUp>(),
-      userLogin: serviceLocator<UserLogin>(),
-    ),
-  );
+  serviceLocator
+    ..registerLazySingleton<AuthRemoteDatasource>(
+      () => AuthRemoteDataSourceImpl(
+        serviceLocator<FirebaseAuth>(),
+        serviceLocator<FirebaseFirestore>(),
+      ),
+    )
+    // repository
+    ..registerLazySingleton<AuthRepository>(
+      () => AuthRepositoryImpl(serviceLocator<AuthRemoteDatasource>()),
+    )
+    // sign up usecase
+    ..registerLazySingleton<UserSignUp>(
+      () => UserSignUp(serviceLocator<AuthRepository>()),
+    )
+    // login usecase
+    ..registerLazySingleton<UserLogin>(
+      () => UserLogin(serviceLocator<AuthRepository>()),
+    )
+    // bloc
+    ..registerFactory<AuthBloc>(
+      () => AuthBloc(
+        userSignUp: serviceLocator<UserSignUp>(),
+        userLogin: serviceLocator<UserLogin>(),
+      ),
+    );
 }
