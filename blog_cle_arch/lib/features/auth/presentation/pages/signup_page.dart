@@ -1,5 +1,6 @@
 import 'package:blog_cle_arch/core/common/widgets/loader.dart';
 import 'package:blog_cle_arch/core/theme/app_pallete.dart';
+import 'package:blog_cle_arch/core/utils/show_snackbar.dart';
 import 'package:blog_cle_arch/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog_cle_arch/features/auth/presentation/pages/login_page.dart';
 import 'package:blog_cle_arch/features/auth/presentation/widgets/auth_field.dart';
@@ -39,7 +40,7 @@ class _SignupPageState extends State<SignupPage> {
         child: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is AuthFailure) {
-              //
+              showSnackbar(context, state.message);
             }
           },
           builder: (context, state) {

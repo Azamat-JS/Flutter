@@ -3,6 +3,7 @@ import 'package:blog_cle_arch/core/error/failures.dart';
 import 'package:blog_cle_arch/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:blog_cle_arch/features/auth/domain/entities/user_entity.dart';
 import 'package:blog_cle_arch/features/auth/domain/repository/auth_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -12,8 +13,13 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, UserEntity>> loginWithEmailPassword({
     required String email,
     required String password,
-  }) {
-    throw UnimplementedError();
+  }) async {
+    return _getUser(
+      () async => await remoteDatasource.loginWithEmailPassword(
+        email: email,
+        password: password,
+      ),
+    );
   }
 
   @override
@@ -22,13 +28,23 @@ class AuthRepositoryImpl implements AuthRepository {
     required String email,
     required String password,
   }) async {
-    try {
-      final userData = await remoteDatasource.signUpWithEmailPassword(
+    return _getUser(
+      () async => await remoteDatasource.signUpWithEmailPassword(
         name: name,
         email: email,
         password: password,
-      );
+      ),
+    );
+  }
+
+  Future<Either<Failure, UserEntity>> _getUser(
+    Future<UserEntity> Function() fn,
+  ) async {
+    try {
+      final userData = await fn();
       return right(userData);
+    } on FirebaseAuthException catch (e) {
+      return left(Failure(e.toString()));
     } on ServerException catch (e) {
       return left(Failure(e.message));
     }
