@@ -14,8 +14,8 @@ final class AuthLoading extends AuthState {
 }
 
 final class AuthSuccess extends AuthState {
-  final String uid;
-  const AuthSuccess(this.uid);
+  final UserEntity userData;
+  const AuthSuccess(this.userData);
 }
 
 final class AuthFailure extends AuthState {

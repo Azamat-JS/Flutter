@@ -1,15 +1,16 @@
 import 'package:blog_cle_arch/core/error/exceptions.dart';
+import 'package:blog_cle_arch/features/auth/data/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract interface class AuthRemoteDatasource {
-  Future<String> signUpWithEmailPassword({
+  Future<UserModel> signUpWithEmailPassword({
     required String name,
     required String email,
     required String password,
   });
 
-  Future<String> loginWithEmailPassword({
+  Future<UserModel> loginWithEmailPassword({
     required String email,
     required String password,
   });
@@ -22,7 +23,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
   AuthRemoteDataSourceImpl(this.firebaseAuth, this.firestore);
 
   @override
-  Future<String> signUpWithEmailPassword({
+  Future<UserModel> signUpWithEmailPassword({
     required String name,
     required String email,
     required String password,
@@ -45,7 +46,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
         'createdAt': FieldValue.serverTimestamp(),
       });
 
-      return user.uid;
+      return UserModel(id: user.uid, email: email, name: name);
     } on FirebaseAuthException catch (e) {
       throw ServerException(e.message ?? 'FirebaseAuth error');
     } catch (e) {
@@ -54,7 +55,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
   }
 
   @override
-  Future<String> loginWithEmailPassword({
+  Future<UserModel> loginWithEmailPassword({
     required String email,
     required String password,
   }) async {
@@ -70,7 +71,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
         throw ServerException('Login failed!');
       }
 
-      return user.uid;
+      final doc = await firestore.collection('users').doc(user.uid).get();
+      final data = doc.data();
+
+      if (data == null) {
+        throw ServerException('User data not found');
+      }
+
+      return UserModel(id: user.uid, email: data['email'], name: data['name']);
     } on FirebaseAuthException catch (e) {
       throw ServerException(e.message ?? 'FirebaseAuth error');
     } catch (e) {

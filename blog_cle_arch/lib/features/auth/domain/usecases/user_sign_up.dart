@@ -1,13 +1,14 @@
 import 'package:blog_cle_arch/core/error/failures.dart';
 import 'package:blog_cle_arch/core/usecase/usecase.dart';
+import 'package:blog_cle_arch/features/auth/domain/entities/user_entity.dart';
 import 'package:blog_cle_arch/features/auth/domain/repository/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
-class UserSignUp implements UseCase<String, UserSignUpParams> {
+class UserSignUp implements UseCase<UserEntity, UserSignUpParams> {
   final AuthRepository authRepository;
   const UserSignUp(this.authRepository);
   @override
-  Future<Either<Failure, String>> call(UserSignUpParams params) async {
+  Future<Either<Failure, UserEntity>> call(UserSignUpParams params) async {
     if (params.password.length < 6) {
       return left(Failure('Password must be at least 6 characters'));
     }
