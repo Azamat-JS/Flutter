@@ -8,6 +8,14 @@ class UserSignUp implements UseCase<String, UserSignUpParams> {
   const UserSignUp(this.authRepository);
   @override
   Future<Either<Failure, String>> call(UserSignUpParams params) async {
+    if (params.password.length < 6) {
+      return left(Failure('Password must be at least 6 characters'));
+    }
+    if (params.email.isEmpty ||
+        params.password.isEmpty ||
+        params.name.isEmpty) {
+      return left(Failure('All fields are required'));
+    }
     return await authRepository.signUpWithEmailPassword(
       name: params.name,
       email: params.email,

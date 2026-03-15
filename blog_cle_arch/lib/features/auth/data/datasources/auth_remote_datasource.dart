@@ -28,7 +28,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
     required String password,
   }) async {
     try {
-      // 1️⃣ Create user in Firebase Auth
       final credential = await firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -40,7 +39,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
         throw ServerException('User creation failed!');
       }
 
-      // 2️⃣ Save additional user info in Firestore
       await firestore.collection('users').doc(user.uid).set({
         'name': name,
         'email': email,
