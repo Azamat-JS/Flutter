@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract interface class AuthRemoteDatasource {
+  User? get userSession;
   Future<UserModel> signUpWithEmailPassword({
     required String name,
     required String email,
@@ -14,6 +15,7 @@ abstract interface class AuthRemoteDatasource {
     required String email,
     required String password,
   });
+  Future<UserModel?> getCurrentUserData();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
@@ -21,6 +23,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
   final FirebaseFirestore firestore;
 
   AuthRemoteDataSourceImpl(this.firebaseAuth, this.firestore);
+
+  @override
+  User? get userSession => firebaseAuth.currentUser;
 
   @override
   Future<UserModel> signUpWithEmailPassword({
@@ -81,6 +86,33 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDatasource {
       return UserModel(id: user.uid, email: data['email'], name: data['name']);
     } on FirebaseAuthException catch (e) {
       throw ServerException(e.message ?? 'FirebaseAuth error');
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<UserModel?> getCurrentUserData() async {
+    try {
+      final currentUser = userSession;
+      if (currentUser == null) {
+        return null;
+      }
+      final doc = await firestore
+          .collection('users')
+          .doc(currentUser.uid)
+          .get();
+      final data = doc.data();
+
+      if (data == null) {
+        return null;
+      }
+
+      return UserModel(
+        id: currentUser.uid,
+        email: data['email'],
+        name: data['name'],
+      );
     } catch (e) {
       throw ServerException(e.toString());
     }
