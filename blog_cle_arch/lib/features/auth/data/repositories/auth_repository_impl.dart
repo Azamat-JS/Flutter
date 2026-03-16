@@ -9,6 +9,22 @@ import 'package:fpdart/fpdart.dart';
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDatasource remoteDatasource;
   const AuthRepositoryImpl(this.remoteDatasource);
+
+  @override
+  Future<Either<Failure, UserEntity>> getCurrentUserData() async {
+    try {
+      final userData = await remoteDatasource.getCurrentUserData();
+      if (userData == null) {
+        return left(Failure('User not logged in!'));
+      }
+      return right(userData);
+    } on FirebaseAuthException catch (e) {
+      return left(Failure(e.toString()));
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    }
+  }
+
   @override
   Future<Either<Failure, UserEntity>> loginWithEmailPassword({
     required String email,
