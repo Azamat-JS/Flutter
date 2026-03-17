@@ -17,7 +17,6 @@ class FirestoreService {
     return notesStream;
   }
 
-  // update note
   Future<void> updateNote(String docID, String newNote) {
     return notes.doc(docID).update({
       'note': newNote,
