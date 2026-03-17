@@ -1,3 +1,4 @@
+import 'package:blog_cle_arch/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:blog_cle_arch/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:blog_cle_arch/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:blog_cle_arch/features/auth/domain/repository/auth_repository.dart';
@@ -18,6 +19,8 @@ Future<void> initDependencies() async {
   serviceLocator.registerLazySingleton<FirebaseFirestore>(
     () => FirebaseFirestore.instance,
   );
+
+  serviceLocator.registerLazySingleton(() => AppUserCubit());
 
   _initAuth();
 }
@@ -52,6 +55,7 @@ void _initAuth() {
         userSignUp: serviceLocator<UserSignUp>(),
         userLogin: serviceLocator<UserLogin>(),
         currentUser: serviceLocator<CurrentUser>(),
+        appUserCubit: serviceLocator<AppUserCubit>(),
       ),
     );
 }
