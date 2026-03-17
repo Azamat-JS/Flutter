@@ -2,6 +2,7 @@ import 'package:blog_cle_arch/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:blog_cle_arch/core/theme/theme.dart';
 import 'package:blog_cle_arch/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog_cle_arch/features/auth/presentation/pages/login_page.dart';
+import 'package:blog_cle_arch/features/blog/presentation/pages/blog_page.dart';
 import 'package:blog_cle_arch/init_dependencies.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class _MyAppState extends State<MyApp> {
         },
         builder: (context, isLoggedIn) {
           if (isLoggedIn) {
-            return Scaffold(body: Center(child: Text('Logged In')));
+            return BlogPage();
           }
           return const LoginPage();
         },
