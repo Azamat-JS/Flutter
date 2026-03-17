@@ -1,5 +1,6 @@
+import 'package:blog_cle_arch/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:blog_cle_arch/core/usecase/usecase.dart';
-import 'package:blog_cle_arch/features/auth/domain/entities/user_entity.dart';
+import 'package:blog_cle_arch/core/common/entities/user_entity.dart';
 import 'package:blog_cle_arch/features/auth/domain/usecases/current_user.dart';
 import 'package:blog_cle_arch/features/auth/domain/usecases/user_login.dart';
 import 'package:blog_cle_arch/features/auth/domain/usecases/user_sign_up.dart';
@@ -12,13 +13,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserSignUp _userSignUp;
   final UserLogin _userLogin;
   final CurrentUser _currentUser;
+  final AppUserCubit _appUserCubit;
   AuthBloc({
     required UserSignUp userSignUp,
     required UserLogin userLogin,
     required CurrentUser currentUser,
+    required AppUserCubit appUserCubit,
   }) : _userSignUp = userSignUp,
        _userLogin = userLogin,
        _currentUser = currentUser,
+       _appUserCubit = appUserCubit,
        super(AuthInitial()) {
     on<AuthSignUp>(_onAuthSignUp);
 

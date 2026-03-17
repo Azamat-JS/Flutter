@@ -1,4 +1,4 @@
-import 'package:blog_cle_arch/features/auth/domain/entities/user_entity.dart';
+import 'package:blog_cle_arch/core/common/entities/user_entity.dart';
 
 class UserModel extends UserEntity {
   UserModel({required super.id, required super.email, required super.name});

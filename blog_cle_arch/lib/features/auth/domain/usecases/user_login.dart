@@ -1,6 +1,6 @@
 import 'package:blog_cle_arch/core/error/failures.dart';
 import 'package:blog_cle_arch/core/usecase/usecase.dart';
-import 'package:blog_cle_arch/features/auth/domain/entities/user_entity.dart';
+import 'package:blog_cle_arch/core/common/entities/user_entity.dart';
 import 'package:blog_cle_arch/features/auth/domain/repository/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
