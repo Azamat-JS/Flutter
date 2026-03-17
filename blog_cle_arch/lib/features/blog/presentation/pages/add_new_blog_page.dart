@@ -32,6 +32,7 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
           IconButton(onPressed: () {}, icon: const Icon(Icons.done_rounded)),
         ],
       ),
+      //body
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
