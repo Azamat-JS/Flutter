@@ -33,10 +33,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _isUserLoggedIn(AuthIsUserLogged event, Emitter<AuthState> emit) async {
     final res = await _currentUser(NoParams());
 
-    res.fold((l) => emit(AuthFailure(l.message)), (r) {
-      print(r.email);
-      emit(AuthSuccess(r));
-    });
+    res.fold(
+      (l) => emit(AuthFailure(l.message)),
+      (r) => _emitAuthSuccess(r, emit),
+    );
   }
 
   void _onAuthSignUp(AuthSignUp event, Emitter<AuthState> emit) async {
@@ -51,7 +51,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     res.fold(
       (l) => emit(AuthFailure(l.message)),
-      (userData) => emit(AuthSuccess(userData)),
+      (r) => _emitAuthSuccess(r, emit),
     );
   }
 
@@ -61,6 +61,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       UserLoginParams(email: event.email, password: event.password),
     );
 
-    res.fold((l) => emit(AuthFailure(l.message)), (r) => AuthSuccess(r));
+    res.fold(
+      (l) => emit(AuthFailure(l.message)),
+      (r) => _emitAuthSuccess(r, emit),
+    );
+  }
+
+  void _emitAuthSuccess(UserEntity user, Emitter<AuthState> emit) {
+    _appUserCubit.updateUser(user);
+    emit(AuthSuccess(user));
   }
 }
