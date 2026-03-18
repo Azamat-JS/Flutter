@@ -15,6 +15,7 @@ class AddNewBlogPage extends StatefulWidget {
 class _AddNewBlogPageState extends State<AddNewBlogPage> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
+  List<String> selectedTopics = [];
 
   @override
   void dispose() {
@@ -69,9 +70,35 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
                           .map(
                             (e) => Padding(
                               padding: const EdgeInsets.all(5.0),
-                              child: Chip(
-                                label: Text(e),
-                                side: BorderSide(color: AppPallete.borderColor),
+                              child: GestureDetector(
+                                onTap: () {
+                                  if (selectedTopics.contains(e)) {
+                                    selectedTopics.remove(e);
+                                  } else {
+                                    selectedTopics.add(e);
+                                  }
+                                  setState(() {});
+                                },
+                                child: FilterChip(
+                                  label: Text(e),
+                                  selected: selectedTopics.contains(e),
+                                  onSelected: (isSelected) {
+                                    setState(() {
+                                      if (isSelected) {
+                                        selectedTopics.add(e);
+                                      } else {
+                                        selectedTopics.remove(e);
+                                      }
+                                    });
+                                  },
+                                  selectedColor: AppPallete.gradient1,
+                                  backgroundColor: AppPallete.backgroundColor,
+                                  side: selectedTopics.contains(e)
+                                      ? null
+                                      : const BorderSide(
+                                          color: AppPallete.borderColor,
+                                        ),
+                                ),
                               ),
                             ),
                           )
