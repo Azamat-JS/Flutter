@@ -2,6 +2,7 @@ import 'package:blog_cle_arch/core/error/exceptions.dart';
 import 'package:blog_cle_arch/core/error/failures.dart';
 import 'package:blog_cle_arch/features/blog/data/datasources/blog_remote_data_source.dart';
 import 'package:blog_cle_arch/features/blog/data/models/blog_model.dart';
+import 'package:blog_cle_arch/features/blog/domain/entity/blog_entity.dart';
 import 'package:blog_cle_arch/features/blog/domain/repositories/blog_repository.dart';
 import 'package:fpdart/fpdart.dart';
 import 'dart:io';
@@ -14,7 +15,7 @@ class BlogRepositoryImpl implements BlogRepository {
   BlogRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<Either<Failure, void>> uploadBlog({
+  Future<Either<Failure, BlogEntity>> uploadBlog({
     required File image,
     required String title,
     required String content,
@@ -47,7 +48,7 @@ class BlogRepositoryImpl implements BlogRepository {
         updatedAt: blog.updatedAt,
       );
       await remoteDataSource.uploadBlog(blogWithImage);
-      return const Right(null);
+      return Right(blogWithImage);
     } on ServerException catch (e) {
       return Left(Failure(e.message));
     }
