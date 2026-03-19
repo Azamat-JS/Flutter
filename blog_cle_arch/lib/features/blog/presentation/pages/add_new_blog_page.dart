@@ -70,47 +70,50 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
                     padding: EdgeInsets.all(16),
                     color: AppPallete.borderColor,
                   ),
-                  child: SizedBox(
-                    height: 150,
-                    width: double.infinity,
-                    child: Builder(
-                      builder: (context) {
-                        if (isPickingImage) {
-                          return const Center(
-                            child: CircularProgressIndicator.adaptive(),
+                  child: GestureDetector(
+                    onTap: selectImage,
+                    child: SizedBox(
+                      height: 150,
+                      width: double.infinity,
+                      child: Builder(
+                        builder: (context) {
+                          if (isPickingImage) {
+                            return const Center(
+                              child: CircularProgressIndicator.adaptive(),
+                            );
+                          }
+                          if (image != null) {
+                            final pixelRatio = MediaQuery.of(
+                              context,
+                            ).devicePixelRatio;
+                            final cacheWidth =
+                                (MediaQuery.of(context).size.width * pixelRatio)
+                                    .round();
+                            return ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.file(
+                                image!,
+                                height: 150,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                                cacheWidth: cacheWidth,
+                                filterQuality: FilterQuality.low,
+                              ),
+                            );
+                          }
+                          return const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.folder_open, size: 50),
+                              SizedBox(height: 15),
+                              Text(
+                                'Select your image',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ],
                           );
-                        }
-                        if (image != null) {
-                          final pixelRatio = MediaQuery.of(
-                            context,
-                          ).devicePixelRatio;
-                          final cacheWidth =
-                              (MediaQuery.of(context).size.width * pixelRatio)
-                                  .round();
-                          return ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.file(
-                              image!,
-                              height: 150,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                              cacheWidth: cacheWidth,
-                              filterQuality: FilterQuality.low,
-                            ),
-                          );
-                        }
-                        return const Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.folder_open, size: 50),
-                            SizedBox(height: 15),
-                            Text(
-                              'Select your image',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ],
-                        );
-                      },
+                        },
+                      ),
                     ),
                   ),
                 ),
