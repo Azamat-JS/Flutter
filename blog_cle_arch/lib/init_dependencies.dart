@@ -6,8 +6,14 @@ import 'package:blog_cle_arch/features/auth/domain/usecases/current_user.dart';
 import 'package:blog_cle_arch/features/auth/domain/usecases/user_login.dart';
 import 'package:blog_cle_arch/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:blog_cle_arch/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:blog_cle_arch/features/blog/data/datasources/blog_remote_data_source.dart';
+import 'package:blog_cle_arch/features/blog/data/repositories/blog_repository_impl.dart';
+import 'package:blog_cle_arch/features/blog/domain/repositories/blog_repository.dart';
+import 'package:blog_cle_arch/features/blog/domain/usecases/upload_blog.dart';
+import 'package:blog_cle_arch/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 
 final serviceLocator = GetIt.instance;
@@ -23,6 +29,7 @@ Future<void> initDependencies() async {
   serviceLocator.registerLazySingleton(() => AppUserCubit());
 
   _initAuth();
+  _initBloc();
 }
 
 void _initAuth() {
@@ -58,4 +65,25 @@ void _initAuth() {
         appUserCubit: serviceLocator<AppUserCubit>(),
       ),
     );
+}
+
+void _initBloc() {
+  // datasource
+  serviceLocator
+    ..registerLazySingleton<BlogRemoteDataSource>(
+      () => BlogRemoteDataSourceImpl(
+        serviceLocator<FirebaseFirestore>(),
+        serviceLocator<FirebaseStorage>(),
+      ),
+    )
+    // repository
+    ..registerLazySingleton<BlogRepository>(
+      () => BlogRepositoryImpl(serviceLocator<BlogRemoteDataSource>()),
+    )
+    // usecase
+    ..registerLazySingleton<UploadBlog>(
+      () => UploadBlog(serviceLocator<BlogRepository>()),
+    )
+    // bloc
+    ..registerFactory<BlogBloc>(() => BlogBloc(serviceLocator<UploadBlog>()));
 }
