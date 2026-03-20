@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:blog_cle_arch/core/common/cubits/app_user/app_user_cubit.dart';
+import 'package:blog_cle_arch/core/common/widgets/loader.dart';
 import 'package:blog_cle_arch/core/theme/app_pallete.dart';
 import 'package:blog_cle_arch/core/utils/pick_image.dart';
 import 'package:blog_cle_arch/core/utils/show_snackbar.dart';
@@ -96,6 +97,9 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
           }
         },
         builder: (context, state) {
+          if (state is BlogLoading) {
+            return const Loader();
+          }
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
