@@ -1,4 +1,5 @@
 import 'package:blog_cle_arch/core/common/cubits/app_user/app_user_cubit.dart';
+import 'package:blog_cle_arch/core/network/connection_checker.dart';
 import 'package:blog_cle_arch/core/utils/image_storage.dart';
 import 'package:blog_cle_arch/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:blog_cle_arch/features/auth/data/repositories/auth_repository_impl.dart';
@@ -17,6 +18,7 @@ import 'package:blog_cle_arch/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 final serviceLocator = GetIt.instance;
 
@@ -29,9 +31,12 @@ Future<void> initDependencies() async {
   );
 
   serviceLocator.registerLazySingleton<ImageStorage>(() => LocalImageStorage());
-
+  serviceLocator.registerLazySingleton(() => InternetConnection());
+  //core
   serviceLocator.registerLazySingleton(() => AppUserCubit());
-
+  serviceLocator.registerLazySingleton<ConnectionChecker>(
+    () => ConnectionCheckerImpl(serviceLocator<InternetConnection>()),
+  );
   _initAuth();
   _initBloc();
 }
@@ -47,7 +52,10 @@ void _initAuth() {
     )
     // repository
     ..registerLazySingleton<AuthRepository>(
-      () => AuthRepositoryImpl(serviceLocator<AuthRemoteDatasource>()),
+      () => AuthRepositoryImpl(
+        serviceLocator<AuthRemoteDatasource>(),
+        serviceLocator<ConnectionChecker>(),
+      ),
     )
     // sign up usecase
     ..registerLazySingleton<UserSignUp>(

@@ -1,18 +1,30 @@
 import 'package:blog_cle_arch/core/error/exceptions.dart';
 import 'package:blog_cle_arch/core/error/failures.dart';
+import 'package:blog_cle_arch/core/network/connection_checker.dart';
 import 'package:blog_cle_arch/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:blog_cle_arch/core/common/entities/user_entity.dart';
+import 'package:blog_cle_arch/features/auth/data/models/user_model.dart';
 import 'package:blog_cle_arch/features/auth/domain/repository/auth_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDatasource remoteDatasource;
-  const AuthRepositoryImpl(this.remoteDatasource);
+  final ConnectionChecker connectionChecker;
+  const AuthRepositoryImpl(this.remoteDatasource, this.connectionChecker);
 
   @override
   Future<Either<Failure, UserEntity>> getCurrentUserData() async {
     try {
+      if (!await (connectionChecker.isConnected)) {
+        final session = remoteDatasource.userSession;
+        if (session == null) {
+          return left(Failure('User not logged in'));
+        }
+        return right(
+          UserModel(id: session.uid, email: session.email ?? '', name: ''),
+        );
+      }
       final userData = await remoteDatasource.getCurrentUserData();
       if (userData == null) {
         return left(Failure('User not logged in!'));
@@ -57,6 +69,9 @@ class AuthRepositoryImpl implements AuthRepository {
     Future<UserEntity> Function() fn,
   ) async {
     try {
+      if (!await (connectionChecker.isConnected)) {
+        return left(Failure('No Internet Connection!'));
+      }
       final userData = await fn();
       return right(userData);
     } on FirebaseAuthException catch (e) {

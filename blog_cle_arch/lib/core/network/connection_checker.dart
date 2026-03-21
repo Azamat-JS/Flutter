@@ -8,6 +8,5 @@ class ConnectionCheckerImpl implements ConnectionChecker {
   final InternetConnection internetConnection;
   ConnectionCheckerImpl(this.internetConnection);
   @override
-  Future<bool> get isConnected async =>
-      await internetConnection.hasInternetAccess;
+  Future<bool> get isConnected => internetConnection.hasInternetAccess;
 }
