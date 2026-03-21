@@ -1,5 +1,6 @@
 import 'package:blog_cle_arch/core/error/exceptions.dart';
 import 'package:blog_cle_arch/core/error/failures.dart';
+import 'package:blog_cle_arch/core/utils/image_storage.dart';
 import 'package:blog_cle_arch/features/blog/data/datasources/blog_remote_data_source.dart';
 import 'package:blog_cle_arch/features/blog/data/models/blog_model.dart';
 import 'package:blog_cle_arch/features/blog/domain/entity/blog_entity.dart';
@@ -11,8 +12,8 @@ import 'package:uuid/uuid.dart';
 
 class BlogRepositoryImpl implements BlogRepository {
   final BlogRemoteDataSource remoteDataSource;
-
-  BlogRepositoryImpl(this.remoteDataSource);
+  final ImageStorage imageStorage;
+  BlogRepositoryImpl(this.remoteDataSource, this.imageStorage);
 
   @override
   Future<Either<Failure, BlogEntity>> uploadBlog({
@@ -34,19 +35,9 @@ class BlogRepositoryImpl implements BlogRepository {
     );
 
     try {
-      final imageUrl = await remoteDataSource.uploadBlogImage(
-        image: image,
-        blog: blog,
-      );
-      final blogWithImage = BlogModel(
-        id: blog.id,
-        posterId: blog.posterId,
-        title: blog.title,
-        content: blog.content,
-        imageUrl: imageUrl,
-        topics: blog.topics,
-        updatedAt: blog.updatedAt,
-      );
+      final imagePath = await imageStorage.saveImage(image, blog.id);
+
+      final blogWithImage = blog.copyWith(imageUrl: imagePath);
       await remoteDataSource.uploadBlog(blogWithImage);
       return Right(blogWithImage);
     } on ServerException catch (e) {
