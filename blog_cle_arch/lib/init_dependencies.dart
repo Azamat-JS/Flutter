@@ -11,6 +11,7 @@ import 'package:blog_cle_arch/features/blog/data/datasources/blog_remote_data_so
 import 'package:blog_cle_arch/features/blog/data/repositories/blog_repository_impl.dart';
 import 'package:blog_cle_arch/features/blog/data/services/local_storage.dart';
 import 'package:blog_cle_arch/features/blog/domain/repositories/blog_repository.dart';
+import 'package:blog_cle_arch/features/blog/domain/usecases/get_all_blogs.dart';
 import 'package:blog_cle_arch/features/blog/domain/usecases/upload_blog.dart';
 import 'package:blog_cle_arch/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -87,6 +88,12 @@ void _initBloc() {
     ..registerLazySingleton<UploadBlog>(
       () => UploadBlog(serviceLocator<BlogRepository>()),
     )
+    ..registerFactory(() => GetAllBlogs(serviceLocator<BlogRepository>()))
     // bloc
-    ..registerFactory<BlogBloc>(() => BlogBloc(serviceLocator<UploadBlog>()));
+    ..registerFactory<BlogBloc>(
+      () => BlogBloc(
+        getAllBlogs: serviceLocator<GetAllBlogs>(),
+        uploadBlog: serviceLocator<UploadBlog>(),
+      ),
+    );
 }
