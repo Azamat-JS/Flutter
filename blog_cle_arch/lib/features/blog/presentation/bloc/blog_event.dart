@@ -5,6 +5,7 @@ sealed class BlogEvent {}
 
 final class BlogUpload extends BlogEvent {
   final String posterId;
+  final String posterName;
   final String title;
   final String content;
   final File image;
@@ -12,6 +13,7 @@ final class BlogUpload extends BlogEvent {
 
   BlogUpload({
     required this.posterId,
+    required this.posterName,
     required this.title,
     required this.content,
     required this.image,

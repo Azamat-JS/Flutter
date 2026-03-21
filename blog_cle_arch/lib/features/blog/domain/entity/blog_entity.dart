@@ -1,6 +1,7 @@
 class BlogEntity {
   final String id;
   final String posterId;
+  final String posterName;
   final String title;
   final String content;
   final String imageUrl;
@@ -10,6 +11,7 @@ class BlogEntity {
   BlogEntity({
     required this.id,
     required this.posterId,
+    required this.posterName,
     required this.title,
     required this.content,
     required this.imageUrl,

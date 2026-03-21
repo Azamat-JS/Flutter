@@ -10,6 +10,7 @@ abstract interface class BlogRepository {
     required String title,
     required String content,
     required String posterId,
+    required String posterName,
     required List<String> topics,
   });
 }

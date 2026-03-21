@@ -17,6 +17,7 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
     final res = await uploadBlog(
       UploadBlogParams(
         posterId: event.posterId,
+        posterName: event.posterName,
         title: event.title,
         content: event.content,
         image: event.image,

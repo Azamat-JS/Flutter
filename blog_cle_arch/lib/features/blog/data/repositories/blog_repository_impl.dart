@@ -21,12 +21,14 @@ class BlogRepositoryImpl implements BlogRepository {
     required String title,
     required String content,
     required String posterId,
+    required String posterName,
     required List<String> topics,
   }) async {
     final String id = const Uuid().v4();
     final BlogModel blog = BlogModel(
       id: id,
       posterId: posterId,
+      posterName: posterName,
       title: title,
       content: content,
       imageUrl: '',

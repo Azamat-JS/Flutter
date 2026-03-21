@@ -5,6 +5,7 @@ class BlogModel extends BlogEntity {
   BlogModel({
     required super.id,
     required super.posterId,
+    required super.posterName,
     required super.title,
     required super.content,
     required super.imageUrl,
@@ -15,6 +16,7 @@ class BlogModel extends BlogEntity {
   BlogModel copyWith({
     String? id,
     String? posterId,
+    String? posterName,
     String? title,
     String? content,
     String? imageUrl,
@@ -24,6 +26,7 @@ class BlogModel extends BlogEntity {
     return BlogModel(
       id: id ?? this.id,
       posterId: posterId ?? this.posterId,
+      posterName: posterName ?? this.posterName,
       title: title ?? this.title,
       content: content ?? this.content,
       imageUrl: imageUrl ?? this.imageUrl,
@@ -36,6 +39,7 @@ class BlogModel extends BlogEntity {
     return BlogModel(
       id: json['id'],
       posterId: json['poster_id'],
+      posterName: json['poster_name'] ?? '',
       title: json['title'],
       content: json['content'],
       imageUrl: json['image_url'],
@@ -50,6 +54,7 @@ class BlogModel extends BlogEntity {
     return {
       'id': id,
       'poster_id': posterId,
+      'poster_name': posterName,
       'title': title,
       'content': content,
       'topics': topics,

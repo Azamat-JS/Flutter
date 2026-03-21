@@ -50,9 +50,13 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
         image != null) {
       final posterId =
           (context.read<AppUserCubit>().state as AppUserLoggedIn).userEntity.id;
+      final posterName = (context.read<AppUserCubit>().state as AppUserLoggedIn)
+          .userEntity
+          .name;
       context.read<BlogBloc>().add(
         BlogUpload(
           posterId: posterId,
+          posterName: posterName,
           title: titleController.text.trim(),
           content: contentController.text.trim(),
           image: image!,
