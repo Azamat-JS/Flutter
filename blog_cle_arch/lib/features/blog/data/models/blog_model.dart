@@ -5,7 +5,7 @@ class BlogModel extends BlogEntity {
   BlogModel({
     required super.id,
     required super.posterId,
-    required super.posterName,
+    super.posterName,
     required super.title,
     required super.content,
     required super.imageUrl,
