@@ -2,7 +2,6 @@ import 'package:blog_cle_arch/core/error/exceptions.dart';
 import 'package:blog_cle_arch/features/auth/data/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 
 abstract interface class AuthRemoteDatasource {
   User? get userSession;

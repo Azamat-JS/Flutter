@@ -5,6 +5,7 @@ import 'package:blog_cle_arch/features/auth/data/datasources/auth_remote_datasou
 import 'package:blog_cle_arch/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:blog_cle_arch/features/auth/domain/repository/auth_repository.dart';
 import 'package:blog_cle_arch/features/auth/domain/usecases/current_user.dart';
+import 'package:blog_cle_arch/features/auth/domain/usecases/logout_user.dart';
 import 'package:blog_cle_arch/features/auth/domain/usecases/user_login.dart';
 import 'package:blog_cle_arch/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:blog_cle_arch/features/auth/presentation/bloc/auth_bloc.dart';
@@ -33,18 +34,12 @@ Future<void> initDependencies() async {
     () => FirebaseFirestore.instance,
   );
 
-  print('init start');
-
   final dir = await getApplicationDocumentsDirectory();
-  print('init ${dir.path}');
   Hive.init(dir.path);
-  print('hive init');
 
   final blogBox = await Hive.openBox('blogs');
-  print('box opened');
 
   serviceLocator.registerLazySingleton<Box>(() => blogBox);
-  print('box registered');
 
   serviceLocator.registerLazySingleton<ImageStorage>(() => LocalImageStorage());
   serviceLocator.registerLazySingleton(() => InternetConnection());
@@ -84,6 +79,9 @@ void _initAuth() {
     ..registerLazySingleton<CurrentUser>(
       () => CurrentUser(serviceLocator<AuthRepository>()),
     )
+    ..registerLazySingleton<LogoutUser>(
+      () => LogoutUser(serviceLocator<AuthRepository>()),
+    )
     // bloc
     ..registerFactory<AuthBloc>(
       () => AuthBloc(
@@ -91,6 +89,7 @@ void _initAuth() {
         userLogin: serviceLocator<UserLogin>(),
         currentUser: serviceLocator<CurrentUser>(),
         appUserCubit: serviceLocator<AppUserCubit>(),
+        logoutUser: serviceLocator<LogoutUser>(),
       ),
     );
 }
