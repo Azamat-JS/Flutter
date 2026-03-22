@@ -1,6 +1,8 @@
 import 'package:blog_cle_arch/core/common/widgets/loader.dart';
 import 'package:blog_cle_arch/core/theme/app_pallete.dart';
 import 'package:blog_cle_arch/core/utils/show_snackbar.dart';
+import 'package:blog_cle_arch/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:blog_cle_arch/features/auth/presentation/pages/login_page.dart';
 import 'package:blog_cle_arch/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:blog_cle_arch/features/blog/presentation/pages/add_new_blog_page.dart';
 import 'package:blog_cle_arch/features/blog/presentation/widgets/blog_card.dart';
@@ -25,50 +27,68 @@ class _BlogPageState extends State<BlogPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Blog App'),
-        actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.logout)),
-          IconButton(
-            onPressed: () {
-              Navigator.push(context, AddNewBlogPage.route());
-            },
-            icon: const Icon(CupertinoIcons.add_circled),
-          ),
-        ],
-      ),
-      body: BlocConsumer<BlogBloc, BlogState>(
-        listener: (context, state) {
-          if (state is BlogFailure) {
-            showSnackbar(context, state.error);
-          }
-        },
-        builder: (context, state) {
-          if (state is BlogLoading) {
-            return const Loader();
-          }
-          if (state is BlogDisplaySuccess) {
-            if (state.blogs.isEmpty) {
-              return Text('No blogs available');
-            }
-            return ListView.builder(
-              itemCount: state.blogs.length,
-              itemBuilder: (context, index) {
-                final blog = state.blogs[index];
-                return BlogCard(
-                  blog: blog,
-                  color: index % 3 == 0
-                      ? AppPallete.gradient1
-                      : index % 3 == 1
-                      ? AppPallete.gradient2
-                      : AppPallete.gradient3,
-                );
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthLoggedOut) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            LoginPage.route(),
+            (route) => false,
+          );
+        } else if (state is AuthFailure) {
+          showSnackbar(context, state.message);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Blog App'),
+          actions: [
+            IconButton(
+              onPressed: () {
+                context.read<AuthBloc>().add(LogoutRequested());
               },
-            );
-          }
-          return SizedBox();
-        },
+              icon: Icon(Icons.logout),
+            ),
+            IconButton(
+              onPressed: () {
+                Navigator.push(context, AddNewBlogPage.route());
+              },
+              icon: const Icon(CupertinoIcons.add_circled),
+            ),
+          ],
+        ),
+        body: BlocConsumer<BlogBloc, BlogState>(
+          listener: (context, state) {
+            if (state is BlogFailure) {
+              showSnackbar(context, state.error);
+            }
+          },
+          builder: (context, state) {
+            if (state is BlogLoading) {
+              return const Loader();
+            }
+            if (state is BlogDisplaySuccess) {
+              if (state.blogs.isEmpty) {
+                return Text('No blogs available');
+              }
+              return ListView.builder(
+                itemCount: state.blogs.length,
+                itemBuilder: (context, index) {
+                  final blog = state.blogs[index];
+                  return BlogCard(
+                    blog: blog,
+                    color: index % 3 == 0
+                        ? AppPallete.gradient1
+                        : index % 3 == 1
+                        ? AppPallete.gradient2
+                        : AppPallete.gradient3,
+                  );
+                },
+              );
+            }
+            return SizedBox();
+          },
+        ),
       ),
     );
   }
