@@ -8,6 +8,7 @@ import 'package:blog_cle_arch/features/auth/domain/usecases/current_user.dart';
 import 'package:blog_cle_arch/features/auth/domain/usecases/user_login.dart';
 import 'package:blog_cle_arch/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:blog_cle_arch/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:blog_cle_arch/features/blog/data/datasources/blog_local_data_source.dart';
 import 'package:blog_cle_arch/features/blog/data/datasources/blog_remote_data_source.dart';
 import 'package:blog_cle_arch/features/blog/data/repositories/blog_repository_impl.dart';
 import 'package:blog_cle_arch/features/blog/data/services/local_storage.dart';
@@ -18,7 +19,9 @@ import 'package:blog_cle_arch/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:path_provider/path_provider.dart';
 
 final serviceLocator = GetIt.instance;
 
@@ -30,6 +33,19 @@ Future<void> initDependencies() async {
     () => FirebaseFirestore.instance,
   );
 
+  print('init start');
+
+  final dir = await getApplicationDocumentsDirectory();
+  print('init ${dir.path}');
+  Hive.init(dir.path);
+  print('hive init');
+
+  final blogBox = await Hive.openBox('blogs');
+  print('box opened');
+
+  serviceLocator.registerLazySingleton<Box>(() => blogBox);
+  print('box registered');
+
   serviceLocator.registerLazySingleton<ImageStorage>(() => LocalImageStorage());
   serviceLocator.registerLazySingleton(() => InternetConnection());
   //core
@@ -38,7 +54,7 @@ Future<void> initDependencies() async {
     () => ConnectionCheckerImpl(serviceLocator<InternetConnection>()),
   );
   _initAuth();
-  _initBloc();
+  _initBlog();
 }
 
 void _initAuth() {
@@ -79,17 +95,22 @@ void _initAuth() {
     );
 }
 
-void _initBloc() {
+void _initBlog() {
   // datasource
   serviceLocator
     ..registerLazySingleton<BlogRemoteDataSource>(
       () => BlogRemoteDataSourceImpl(serviceLocator<FirebaseFirestore>()),
+    )
+    ..registerLazySingleton<BlogLocalDataSource>(
+      () => BlogLocalDataSourceImpl(serviceLocator<Box>()),
     )
     // repository
     ..registerLazySingleton<BlogRepository>(
       () => BlogRepositoryImpl(
         serviceLocator<BlogRemoteDataSource>(),
         serviceLocator<ImageStorage>(),
+        serviceLocator<BlogLocalDataSource>(),
+        serviceLocator<ConnectionChecker>(),
       ),
     )
     // usecase

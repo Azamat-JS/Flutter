@@ -52,7 +52,13 @@ class BlogViewerPage extends StatelessWidget {
                     height: 290,
                     width: double.infinity,
                     fit: BoxFit.cover,
-                    filterQuality: FilterQuality.low,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        height: 290,
+                        color: Colors.grey,
+                        child: const Center(child: Icon(Icons.broken_image)),
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(height: 20),

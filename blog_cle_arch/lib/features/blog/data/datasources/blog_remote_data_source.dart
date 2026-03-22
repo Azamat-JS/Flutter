@@ -31,7 +31,10 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
   @override
   Future<void> uploadBlog(BlogModel blog) async {
     try {
-      await firestore.collection('blogs').doc(blog.id).set(blog.toJson());
+      await firestore
+          .collection('blogs')
+          .doc(blog.id)
+          .set(blog.toJsonForFirebase());
     } catch (e) {
       throw ServerException(e.toString());
     }

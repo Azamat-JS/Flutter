@@ -48,6 +48,9 @@ class _BlogPageState extends State<BlogPage> {
             return const Loader();
           }
           if (state is BlogDisplaySuccess) {
+            if (state.blogs.isEmpty) {
+              return Text('No blogs available');
+            }
             return ListView.builder(
               itemCount: state.blogs.length,
               itemBuilder: (context, index) {

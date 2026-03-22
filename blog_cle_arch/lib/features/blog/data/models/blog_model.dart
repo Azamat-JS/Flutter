@@ -46,11 +46,23 @@ class BlogModel extends BlogEntity {
       topics: List<String>.from(json['topics'] ?? []),
       updatedAt: json['updated_at'] is Timestamp
           ? (json['updated_at'] as Timestamp).toDate()
-          : json['updated_at'],
+          : DateTime.parse(json['updated_at']),
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJsonForFirebase() {
+    return {
+      'id': id,
+      'poster_id': posterId,
+      'poster_name': posterName,
+      'title': title,
+      'content': content,
+      'topics': topics,
+      'updated_at': FieldValue.serverTimestamp(),
+    };
+  }
+
+  Map<String, dynamic> toJsonForLocal() {
     return {
       'id': id,
       'poster_id': posterId,
@@ -59,7 +71,7 @@ class BlogModel extends BlogEntity {
       'content': content,
       'topics': topics,
       'image_url': imageUrl,
-      'updated_at': FieldValue.serverTimestamp(),
+      'updated_at': updatedAt.toIso8601String(),
     };
   }
 }
