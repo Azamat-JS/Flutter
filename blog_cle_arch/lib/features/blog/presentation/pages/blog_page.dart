@@ -29,6 +29,7 @@ class _BlogPageState extends State<BlogPage> {
       appBar: AppBar(
         title: const Text('Blog App'),
         actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.logout)),
           IconButton(
             onPressed: () {
               Navigator.push(context, AddNewBlogPage.route());
