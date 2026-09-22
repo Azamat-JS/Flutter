@@ -7,14 +7,14 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Consumer(
-        builder: (context, ref, child) {
-          final name = ref.watch(nameProvider);
-          return Column(children: [Center(child: Text(name))]);
-        },
-      ),
+    return Consumer(
+      builder: (context, ref, child) {
+        final name = ref.watch(nameProvider);
+        return Scaffold(
+          appBar: AppBar(),
+          body: Column(children: [Center(child: Text(name))]),
+        );
+      },
     );
   }
 }
