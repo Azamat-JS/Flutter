@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:podtestriver/home_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:podtestriver/user.dart';
 
-final nameProvider = StateProvider<String?>((ref) => null);
+final userProvider = StateNotifierProvider<UserNotifier, User>(
+  (ref) => UserNotifier(),
+);
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
