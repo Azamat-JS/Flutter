@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:podtestriver/home_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final nameProvider = Provider<String>((ref) => 'Azamat Abdulloh');
+final nameProvider = StateProvider<String?>((ref) => null);
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
