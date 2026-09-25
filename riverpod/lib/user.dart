@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 
 @immutable
 class User {
@@ -42,27 +43,11 @@ class User {
   int get hashCode => name.hashCode ^ age.hashCode;
 }
 
-class UserNotifier extends StateNotifier<User> {
-  UserNotifier() : super(User(name: '', age: 0));
+final userRepositoryProvider = Provider((ref) => UserRepository());
 
-  void updateName(String n) {
-    state = state.copyWith(name: n);
-  }
-
-  void updateAge(int a) {
-    state = state.copyWith(age: a);
-  }
-}
-
-class UserNotifierChange extends ChangeNotifier {
-  User user = const User(name: "", age: 0);
-  void updateName(String n) {
-    user = user.copyWith(name: n);
-    notifyListeners();
-  }
-
-  void updateAge(int a) {
-    user = user.copyWith(age: a);
-    notifyListeners();
+class UserRepository {
+  Future<User> fetchUserData(String input) {
+    var url = "https://jsonplaceholder.typicode.com/users/$input";
+    return http.get(Uri.parse(url)).then((value) => User.fromJson(value.body));
   }
 }

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:podtestriver/home_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 import 'package:podtestriver/user.dart';
 
 final fetchUserProvider = FutureProvider((ref) {
-  const url = "https://jsonplaceholder.typicode.com/users/1";
-
-  return http.get(Uri.parse(url)).then((value) => User.fromJson(value.body));
+  final userRepository = ref.watch(userRepositoryProvider);
+  return userRepository.fetchUserData("2");
 });
+
+final streamProvider = StreamProvider((ref) async* {
+  yield [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+});
+
 void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
@@ -27,3 +30,5 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+// 1:04:05

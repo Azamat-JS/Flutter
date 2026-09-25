@@ -2,33 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:podtestriver/main.dart';
 
-class MyHomePage extends ConsumerWidget {
+class MyHomePage extends ConsumerStatefulWidget {
   const MyHomePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // final user = ref.watch(userProvider);  /// watching whole User class
-    ///////////---------------
-    ///
-    // final user = ref.watch(userProvider.select((value) => value.name));  /// watching only one property of User class which is name;
+  ConsumerState<ConsumerStatefulWidget> createState() => _MyHomePageState();
+}
 
-    final user = ref.watch(fetchUserProvider);
-
-    return user.when(
-      data: (data) {
-        return Scaffold(
-          appBar: AppBar(title: Text("")),
-          body: Column(children: [Center(child: Text(""))]),
+class _MyHomePageState extends ConsumerState<MyHomePage> {
+  String userNo = "2";
+  @override
+  Widget build(BuildContext context) {
+    return ref
+        .watch(fetchUserProvider)
+        .when(
+          data: (data) {
+            return Scaffold(
+              appBar: AppBar(),
+              body: Column(
+                children: [
+                  TextField(
+                    onSubmitted: (value) => setState(() {
+                      userNo = value;
+                    }),
+                  ),
+                  Center(child: Text(data.name)),
+                ],
+              ),
+            );
+          },
+          error: (error, stackTrace) {
+            return Scaffold(body: Center(child: Text(error.toString())));
+          },
+          loading: () {
+            return Scaffold(
+              body: Center(child: CircularProgressIndicator.adaptive()),
+            );
+          },
         );
-      },
-      error: (error, stackTrace) {
-        return Center(child: Text(error.toString()));
-      },
-      loading: () {
-        return Center(child: CircularProgressIndicator.adaptive());
-      },
-    );
-
-    /// For Future Provider
   }
 }
