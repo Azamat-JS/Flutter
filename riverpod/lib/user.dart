@@ -45,9 +45,16 @@ class User {
 
 final userRepositoryProvider = Provider((ref) => UserRepository());
 
-class UserRepository {
+class UserRepository extends StateNotifier<bool> {
+  UserRepository() : super(false);
   Future<User> fetchUserData(String input) {
     var url = "https://jsonplaceholder.typicode.com/users/$input";
+
     return http.get(Uri.parse(url)).then((value) => User.fromJson(value.body));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

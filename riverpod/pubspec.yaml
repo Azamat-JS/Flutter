@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_riverpod: ^1.0.0-dev.11
   http: ^1.6.0
+  build_runner: ^2.15.1
 
 dev_dependencies:
   flutter_test:

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:podtestriver/home_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:podtestriver/logger_riverpod.dart';
 import 'package:podtestriver/user.dart';
 
-final fetchUserProvider = FutureProvider((ref) {
+final fetchUserProvider = FutureProvider.family.autoDispose((
+  ref,
+  String input,
+) {
+  ref.onDispose(() {});
   final userRepository = ref.watch(userRepositoryProvider);
-  return userRepository.fetchUserData("2");
+  return userRepository.fetchUserData(input);
 });
 
 final streamProvider = StreamProvider((ref) async* {
@@ -13,7 +18,7 @@ final streamProvider = StreamProvider((ref) async* {
 });
 
 void main() {
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(ProviderScope(observers: [LoggerRiverpod()], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -30,5 +35,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// 1:04:05

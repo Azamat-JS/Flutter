@@ -14,7 +14,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return ref
-        .watch(fetchUserProvider)
+        .watch(fetchUserProvider(userNo))
         .when(
           data: (data) {
             return Scaffold(
