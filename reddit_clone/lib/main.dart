@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:reddit_clone/features/auth/screens/login_screen.dart';
 import 'package:reddit_clone/pallet/theme/pallet.dart';
 import "package:firebase_core/firebase_core.dart";
@@ -7,6 +8,7 @@ import "package:reddit_clone/firebase_options.dart";
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await GoogleSignIn.instance.initialize();
   runApp(const MyApp());
 }
 
