@@ -12,6 +12,6 @@ class CreateCommunityScreen extends ConsumerStatefulWidget {
 class _CreateCommunityScreenState extends ConsumerState<CreateCommunityScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(appBar: AppBar(title: Text("Coommunity")));
   }
 }
