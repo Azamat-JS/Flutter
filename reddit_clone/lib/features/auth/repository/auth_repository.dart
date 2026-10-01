@@ -59,14 +59,21 @@ class AuthRepository {
         );
         await _users.doc(userCredential.user!.uid).set(userModel.toMap());
       } else {
-        final userDoc = await _users.doc(userCredential.user!.uid).get();
-        userModel = UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
+        userModel = await getUserData(userCredential.user!.uid).first;
       }
       return right(userModel);
     } on FirebaseException catch (e) {
-      throw e.message!;
+      return left(Failure(e.message!));
     } catch (e) {
       return left(Failure(e.toString()));
     }
+  }
+
+  Stream<UserModel> getUserData(String uid) {
+    return _users
+        .doc(uid)
+        .snapshots()
+        .where((e) => e.exists)
+        .map((e) => UserModel.fromMap(e.data() as Map<String, dynamic>));
   }
 }
