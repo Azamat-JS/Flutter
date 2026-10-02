@@ -31,6 +31,20 @@ class CommunityRepository {
     }
   }
 
+  Stream<List<CommunityModel>> getUserCommunity(String uid) {
+    return _communities.where('members', arrayContains: uid).snapshots().map((
+      e,
+    ) {
+      List<CommunityModel> communities = [];
+      for (var doc in e.docs) {
+        communities.add(
+          CommunityModel.fromMap(doc.data() as Map<String, dynamic>),
+        );
+      }
+      return communities;
+    });
+  }
+
   CollectionReference get _communities =>
       _firestore.collection(FirebaseConstants.communitiesCollection);
 }
