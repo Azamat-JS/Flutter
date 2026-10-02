@@ -14,7 +14,21 @@ class CommunityScreen extends ConsumerWidget {
       body: ref
           .watch(getCommunityByNameProvider(name))
           .when(
-            data: (data) {},
+            data: (community) => NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) {
+                return [
+                  SliverAppBar(
+                    expandedHeight: 150,
+                    flexibleSpace: Stack(
+                      children: [
+                        Positioned.fill(child: Image.network(community.banner)),
+                      ],
+                    ),
+                  ),
+                ];
+              },
+              body: const Text('Displaying posts'),
+            ),
             error: (error, stackTrace) => ErrorText(error: error.toString()),
             loading: () => const Loader(),
           ),
