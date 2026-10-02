@@ -8,13 +8,22 @@ import 'package:reddit_clone/features/community/repository/community_repository.
 import 'package:reddit_clone/models/community_model.dart';
 import 'package:routemaster/routemaster.dart';
 
+final communityControllerProvider =
+    StateNotifierProvider<CommunityController, bool>((ref) {
+      final communityRepository = ref.watch(communityRepositoryProvider);
+      return CommunityController(
+        communtyRepository: communityRepository,
+        ref: ref,
+      );
+    });
+
 class CommunityController extends StateNotifier<bool> {
   final CommunityRepository _communityRepository;
   final Ref _ref;
   CommunityController({
-    required CommunityRepository communtiyRepository,
+    required CommunityRepository communtyRepository,
     required Ref ref,
-  }) : _communityRepository = communtiyRepository,
+  }) : _communityRepository = communtyRepository,
        _ref = ref,
        super(false);
 
