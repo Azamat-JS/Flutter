@@ -2,14 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/core/common/error_text.dart';
 import 'package:reddit_clone/core/common/loader.dart';
+import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
 import 'package:reddit_clone/features/community/controller/community_controller.dart';
+import 'package:routemaster/routemaster.dart';
 
 class CommunityScreen extends ConsumerWidget {
   final String name;
   const CommunityScreen({super.key, required this.name});
 
+  void navigateToModTools(BuildContext context) {
+    Routemaster.of(context).push('/mod-tools');
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider)!;
     return Scaffold(
       body: ref
           .watch(getCommunityByNameProvider(name))
@@ -54,13 +61,31 @@ class CommunityScreen extends ConsumerWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            OutlinedButton(
-                              style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.symmetric(horizontal: 30),
-                              ),
-                              onPressed: () {},
-                              child: const Text('Join'),
-                            ),
+                            community.mods.contains(user.uid)
+                                ? OutlinedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 30,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      navigateToModTools(context);
+                                    },
+                                    child: const Text('Mod Tools'),
+                                  )
+                                : OutlinedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 30,
+                                      ),
+                                    ),
+                                    onPressed: () {},
+                                    child: Text(
+                                      community.members.contains(user.uid)
+                                          ? "Joined"
+                                          : 'Join',
+                                    ),
+                                  ),
                           ],
                         ),
                         Padding(
