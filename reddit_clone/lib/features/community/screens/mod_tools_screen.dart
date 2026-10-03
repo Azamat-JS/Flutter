@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ModToolsScreen extends StatelessWidget {
-  const ModToolsScreen({super.key});
+  final String name;
+  const ModToolsScreen({super.key, required this.name});
 
   @override
   Widget build(BuildContext context) {

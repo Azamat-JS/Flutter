@@ -18,6 +18,8 @@ final loggedInRoute = RouteMap(
     '/r/:name': (route) => MaterialPage(
       child: CommunityScreen(name: route.pathParameters['name']!),
     ),
-    '/mod-tools': (_) => const MaterialPage(child: ModToolsScreen()),
+    '/mod-tools/:name': (routeData) => MaterialPage(
+      child: ModToolsScreen(name: routeData.pathParameters['name']!),
+    ),
   },
 );
