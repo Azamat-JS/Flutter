@@ -20,11 +20,22 @@ class EditCommunityScreen extends ConsumerStatefulWidget {
 
 class _EditCommunityScreenState extends ConsumerState<EditCommunityScreen> {
   File? bannerFile;
+  File? profileFile;
+
   void selectBannerImage() async {
     final res = await pickImage();
     if (res.isNotEmpty) {
       setState(() {
         bannerFile = File(res.first.path!);
+      });
+    }
+  }
+
+  void selectProfileImage() async {
+    final res = await pickImage();
+    if (res.isNotEmpty) {
+      setState(() {
+        profileFile = File(res.first.path!);
       });
     }
   }
@@ -50,39 +61,54 @@ class _EditCommunityScreenState extends ConsumerState<EditCommunityScreen> {
                     height: 230,
                     child: Stack(
                       children: [
-                        DottedBorder(
-                          options: RoundedRectDottedBorderOptions(
-                            dashPattern: [10, 5],
-                            strokeWidth: 2,
-                            radius: Radius.circular(16),
-                            color: Colors.indigo,
-                            padding: EdgeInsets.all(16),
-                          ),
-                          child: Container(
-                            width: double.infinity,
-                            height: 150,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
+                        GestureDetector(
+                          onTap: selectBannerImage,
+                          child: DottedBorder(
+                            options: RoundedRectDottedBorderOptions(
+                              dashPattern: [10, 5],
+                              strokeWidth: 2,
+                              radius: Radius.circular(16),
+                              color: Colors.indigo,
+                              padding: EdgeInsets.all(16),
                             ),
-                            child:
-                                community.banner.isEmpty ||
-                                    community.banner == Constants.bannerDefault
-                                ? const Center(
-                                    child: Icon(
-                                      Icons.camera_alt_outlined,
-                                      size: 40,
-                                      color: Colors.indigo,
-                                    ),
-                                  )
-                                : Image.network(community.banner),
+                            child: Container(
+                              width: double.infinity,
+                              height: 150,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: bannerFile != null
+                                  ? Image.file(bannerFile!)
+                                  : community.banner.isEmpty ||
+                                        community.banner ==
+                                            Constants.bannerDefault
+                                  ? const Center(
+                                      child: Icon(
+                                        Icons.camera_alt_outlined,
+                                        size: 40,
+                                        color: Colors.indigo,
+                                      ),
+                                    )
+                                  : Image.network(community.banner),
+                            ),
                           ),
                         ),
                         Positioned(
                           bottom: 20,
                           left: 20,
-                          child: CircleAvatar(
-                            backgroundImage: NetworkImage(community.avatar),
-                            radius: 32,
+                          child: GestureDetector(
+                            onTap: selectProfileImage,
+                            child: profileFile != null
+                                ? CircleAvatar(
+                                    backgroundImage: FileImage(profileFile!),
+                                    radius: 32,
+                                  )
+                                : CircleAvatar(
+                                    backgroundImage: NetworkImage(
+                                      community.avatar,
+                                    ),
+                                    radius: 32,
+                                  ),
                           ),
                         ),
                       ],
