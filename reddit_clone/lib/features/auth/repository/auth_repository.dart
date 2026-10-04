@@ -78,4 +78,9 @@ class AuthRepository {
         .where((e) => e.exists)
         .map((e) => UserModel.fromMap(e.data() as Map<String, dynamic>));
   }
+
+  void logOut() async {
+    await _googleSignIn.signOut();
+    await _auth.signOut();
+  }
 }
