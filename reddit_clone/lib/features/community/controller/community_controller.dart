@@ -81,12 +81,36 @@ class CommunityController extends StateNotifier<bool> {
     required BuildContext context,
     required CommunityModel community,
   }) async {
+    state = true;
     if (profileFile != null) {
-      _storageRepository.storeFile(
+      final res = await _storageRepository.storeFile(
         path: 'communities/profile',
         id: community.name,
         file: profileFile,
       );
+      res.fold(
+        (l) => showSnackBar(context, l.message),
+        (r) => community = community.copyWith(avatar: r),
+      );
     }
+
+    if (bannerFile != null) {
+      final res = await _storageRepository.storeFile(
+        path: 'communities/banner',
+        id: community.name,
+        file: bannerFile,
+      );
+      res.fold(
+        (l) => showSnackBar(context, l.message),
+        (r) => community = community.copyWith(banner: r),
+      );
+    }
+
+    final res = await _communityRepository.editCommunity(community);
+    state = false;
+    res.fold(
+      (l) => showSnackBar(context, l.message),
+      (r) => Routemaster.of(context).pop(),
+    );
   }
 }
