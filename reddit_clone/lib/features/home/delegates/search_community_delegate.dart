@@ -6,7 +6,7 @@ import 'package:reddit_clone/features/community/controller/community_controller.
 import 'package:routemaster/routemaster.dart';
 
 class SearchCommunityDelegate extends SearchDelegate {
-  final Ref ref;
+  final WidgetRef ref;
   SearchCommunityDelegate(this.ref);
   @override
   List<Widget>? buildActions(BuildContext context) {
