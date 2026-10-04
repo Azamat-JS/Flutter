@@ -7,7 +7,7 @@ void showSnackBar(BuildContext context, String text) {
     ..showSnackBar(SnackBar(content: Text(text)));
 }
 
-Future<List<PlatformFile?>> pickImage() async {
+Future<List<PlatformFile>> pickImage() async {
   final image = await FilePicker.pickFiles(type: FileType.image);
   return image;
 }

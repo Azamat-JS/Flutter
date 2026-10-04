@@ -1,11 +1,13 @@
+import 'dart:io';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/core/common/error_text.dart';
 import 'package:reddit_clone/core/common/loader.dart';
 import 'package:reddit_clone/core/constants/constants.dart';
+import 'package:reddit_clone/core/utils.dart';
 import 'package:reddit_clone/features/community/controller/community_controller.dart';
-import 'package:reddit_clone/pallet/theme/pallet.dart';
 
 class EditCommunityScreen extends ConsumerStatefulWidget {
   final String name;
@@ -17,6 +19,16 @@ class EditCommunityScreen extends ConsumerStatefulWidget {
 }
 
 class _EditCommunityScreenState extends ConsumerState<EditCommunityScreen> {
+  File? bannerFile;
+  void selectBannerImage() async {
+    final res = await pickImage();
+    if (res.isNotEmpty) {
+      setState(() {
+        bannerFile = File(res.first.path!);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ref
