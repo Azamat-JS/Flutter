@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:reddit_clone/core/constants/constants.dart';
+import 'package:reddit_clone/core/providers/storage_repository_provider.dart';
 import 'package:reddit_clone/core/utils.dart';
 import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
 import 'package:reddit_clone/features/community/repository/community_repository.dart';
@@ -16,8 +19,10 @@ final userCommunitiesProvider = StreamProvider((ref) {
 final communityControllerProvider =
     StateNotifierProvider<CommunityController, bool>((ref) {
       final communityRepository = ref.watch(communityRepositoryProvider);
+      final storageRepository = ref.watch(storageRepoProvider);
       return CommunityController(
         communtyRepository: communityRepository,
+        storageRepository: storageRepository,
         ref: ref,
       );
     });
@@ -31,10 +36,13 @@ final getCommunityByNameProvider = StreamProvider.family((ref, String name) {
 class CommunityController extends StateNotifier<bool> {
   final CommunityRepository _communityRepository;
   final Ref _ref;
+  final StorageRepository _storageRepository;
   CommunityController({
     required CommunityRepository communtyRepository,
+    required StorageRepository storageRepository,
     required Ref ref,
   }) : _communityRepository = communtyRepository,
+       _storageRepository = storageRepository,
        _ref = ref,
        super(false);
 
@@ -65,5 +73,20 @@ class CommunityController extends StateNotifier<bool> {
 
   Stream<CommunityModel> getCommunityByName(String name) {
     return _communityRepository.getCommunityByName(name);
+  }
+
+  void editCommunity({
+    required File? profileFile,
+    required File? bannerFile,
+    required BuildContext context,
+    required CommunityModel community,
+  }) async {
+    if (profileFile != null) {
+      _storageRepository.storeFile(
+        path: 'communities/profile',
+        id: community.name,
+        file: profileFile,
+      );
+    }
   }
 }
